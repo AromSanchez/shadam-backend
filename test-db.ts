@@ -1,0 +1,17 @@
+// test-db.ts
+import { prisma } from "./lib/prisma";
+
+async function main() {
+  const result = await prisma.$queryRaw`SELECT 1+1 AS result`;
+  console.log("✅ Conexión exitosa a PostgreSQL:", result);
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error("❌ Error de conexión:", e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
