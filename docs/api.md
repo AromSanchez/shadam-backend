@@ -45,6 +45,31 @@ Autentica un usuario y setea las cookies de sesión.
 
 ---
 
+## 🔄 POST /auth/refresh
+
+Renueva el `access_token` usando el `refresh_token` de la cookie.
+
+---
+
+### Response 200
+
+```json
+{
+  "message": "Token renovado"
+}
+````
+
+---
+
+### Response 401
+
+```json
+{
+  "statusCode": 401,
+  "message": "Refresh token inválido o expirado"
+}
+```
+
 ## POST /auth/logout
 
 Cierra la sesión eliminando las cookies.

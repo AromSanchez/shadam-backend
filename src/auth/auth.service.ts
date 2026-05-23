@@ -6,47 +6,78 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private prisma: PrismaService,
-    private jwt: JwtService,
-  ) {}
+    constructor(
+        private prisma: PrismaService,
+        private jwt: JwtService,
+    ) { }
 
-  async login(dto: LoginDto, res: any) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+    async login(dto: LoginDto, res: any) {
+        const user = await this.prisma.user.findUnique({
+            where: { email: dto.email },
+        });
 
-    if (!user || !user.is_active) throw new UnauthorizedException('Credenciales inválidas');
+        if (!user || !user.is_active) throw new UnauthorizedException('Credenciales inválidas');
 
-    const validPassword = await bcrypt.compare(dto.password, user.password);
-    if (!validPassword) throw new UnauthorizedException('Credenciales inválidas');
+        const validPassword = await bcrypt.compare(dto.password, user.password);
+        if (!validPassword) throw new UnauthorizedException('Credenciales inválidas');
 
-    const payload = { sub: user.id, role: user.role };
+        const payload = { sub: user.id, role: user.role };
 
-    const accessToken = this.jwt.sign(payload, { expiresIn: '15m' });
-    const refreshToken = this.jwt.sign(payload, { expiresIn: '7d' });
+        const accessToken = this.jwt.sign(payload, { expiresIn: '15m' });
+        const refreshToken = this.jwt.sign(payload, { expiresIn: '7d' });
 
-    res.cookie('access_token', accessToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      maxAge: 15 * 60 * 1000, // 15 min
-    });
+        res.cookie('access_token', accessToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000, // 15 min
+        });
 
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
-    });
+        res.cookie('refresh_token', refreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+        });
 
-    return {
-      first_login: user.first_login,
-      role: user.role,
-    };
-  }
+        return {
+            first_login: user.first_login,
+            role: user.role,
+        };
+    }
 
-  async logout(res: any) {
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
-    return { message: 'Sesión cerrada' };
-  }
+    async refresh(req: any, res: any) {
+        const token = req.cookies?.refresh_token;
+
+        if (!token) throw new UnauthorizedException('No refresh token');
+
+        try {
+            const payload = this.jwt.verify(token) as { sub: number; role: string };
+
+            const user = await this.prisma.user.findUnique({
+                where: { id: payload.sub },
+            });
+
+            if (!user || !user.is_active) throw new UnauthorizedException('Usuario inválido');
+
+            const newAccessToken = this.jwt.sign(
+                { sub: user.id, role: user.role },
+                { expiresIn: '15m' },
+            );
+
+            res.cookie('access_token', newAccessToken, {
+                httpOnly: true,
+                sameSite: 'strict',
+                maxAge: 15 * 60 * 1000,
+            });
+
+            return { message: 'Token renovado' };
+        } catch {
+            throw new UnauthorizedException('Refresh token inválido o expirado');
+        }
+    }
+
+    async logout(res: any) {
+        res.clearCookie('access_token');
+        res.clearCookie('refresh_token');
+        return { message: 'Sesión cerrada' };
+    }
 }
