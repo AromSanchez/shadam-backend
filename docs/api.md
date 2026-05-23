@@ -81,3 +81,37 @@ Cierra la sesión eliminando las cookies.
   "message": "Sesión cerrada"
 }
 ```
+
+
+
+
+### POST `/users`
+Crea un pensionista. Solo accesible para admin.
+
+**Headers:**
+Cookie: access_token=tu_token
+
+**Request Body:**
+
+```json
+{
+  "name": "Juan Pérez",
+  "dni": "12345678"
+}
+
+```
+**Response 201:**
+
+
+```json
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "12345678",
+  "role": "pensioner"
+}
+```
+
+**Response 401:** Token inválido o ausente
+**Response 403:** No tienes permiso para esto
+**Response 409:** Ya existe un usuario con ese DNI
