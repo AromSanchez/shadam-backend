@@ -213,3 +213,233 @@ Retorna un producto por su ID.
 **Response 200 (no encontrado):** `null`
 
 > ⚠️ Nota: actualmente `findOne` retorna `null` si no existe en vez de lanzar un 404.
+
+---
+
+# 📋 Menús
+
+---
+
+## POST `/menus`
+
+Crea un nuevo menú del día. Al crearse, **desactiva automáticamente** cualquier menú activo anterior.
+
+**Request Body:**
+
+```json
+{
+  "nombre": "Menú Lunes 26 Mayo"
+}
+```
+
+**Response 201:**
+```json
+{
+  "id": "clxyz456",
+  "nombre": "Menú Lunes 26 Mayo",
+  "activo": true,
+  "createdAt": "2025-05-26T12:00:00.000Z",
+  "updatedAt": "2025-05-26T12:00:00.000Z"
+}
+```
+
+> Al crear un menú, todos los menús anteriores se desactivan (`activo = false`).
+
+---
+
+## GET `/menus`
+
+Retorna el historial completo de menús (activos e inactivos), ordenados por fecha de creación (más recientes primero). Incluye los productos asociados.
+
+**Response 200:**
+```json
+[
+  {
+    "id": "clxyz456",
+    "nombre": "Menú Lunes 26 Mayo",
+    "activo": true,
+    "createdAt": "2025-05-26T12:00:00.000Z",
+    "updatedAt": "2025-05-26T12:00:00.000Z",
+    "productos": [
+      {
+        "id": "clxyz789",
+        "menuId": "clxyz456",
+        "productoId": 1,
+        "visible": true,
+        "createdAt": "2025-05-26T12:05:00.000Z",
+        "producto": {
+          "id": 1,
+          "nombre": "Caldo de gallina",
+          "descripcion": "Plato de entrada caliente",
+          "precio": "5.50",
+          "imagen": "/uploads/imagen.jpg",
+          "categoria": "ENTRADA",
+          "createdAt": "2025-05-25T00:00:00.000Z",
+          "updatedAt": "2025-05-25T00:00:00.000Z"
+        }
+      }
+    ]
+  }
+]
+```
+
+---
+
+## GET `/menus/actual`
+
+🌐 **Endpoint público** — Retorna el único menú activo con **solo los productos visibles** (`visible = true`). Este endpoint es el que consumirá el frontend de clientes.
+
+**Response 200:**
+```json
+{
+  "id": "clxyz456",
+  "nombre": "Menú Lunes 26 Mayo",
+  "activo": true,
+  "createdAt": "2025-05-26T12:00:00.000Z",
+  "updatedAt": "2025-05-26T12:00:00.000Z",
+  "productos": [
+    {
+      "id": "clxyz789",
+      "menuId": "clxyz456",
+      "productoId": 1,
+      "visible": true,
+      "createdAt": "2025-05-26T12:05:00.000Z",
+      "producto": {
+        "id": 1,
+        "nombre": "Caldo de gallina",
+        "descripcion": "Plato de entrada caliente",
+        "precio": "5.50",
+        "imagen": "/uploads/imagen.jpg",
+        "categoria": "ENTRADA",
+        "createdAt": "2025-05-25T00:00:00.000Z",
+        "updatedAt": "2025-05-25T00:00:00.000Z"
+      }
+    }
+  ]
+}
+```
+
+**Response 404:**
+```json
+{
+  "statusCode": 404,
+  "message": "No hay un menú activo actualmente"
+}
+```
+
+> Solo se incluyen productos con `visible = true`. Los productos ocultos no aparecen.
+
+---
+
+## POST `/menus/:menuId/productos`
+
+Agrega un producto existente a un menú. No permite duplicados.
+
+**Params:**
+| Param  | Tipo   | Descripción          |
+| ------ | ------ | -------------------- |
+| menuId | string | ID cuid del menú     |
+
+**Request Body:**
+
+```json
+{
+  "productoId": 1
+}
+```
+
+**Response 201:**
+```json
+{
+  "id": "clxyz999",
+  "menuId": "clxyz456",
+  "productoId": 1,
+  "visible": true,
+  "createdAt": "2025-05-26T12:05:00.000Z",
+  "producto": {
+    "id": 1,
+    "nombre": "Caldo de gallina",
+    "descripcion": "Plato de entrada caliente",
+    "precio": "5.50",
+    "imagen": "/uploads/imagen.jpg",
+    "categoria": "ENTRADA",
+    "createdAt": "2025-05-25T00:00:00.000Z",
+    "updatedAt": "2025-05-25T00:00:00.000Z"
+  }
+}
+```
+
+**Response 404:** Menú o producto no encontrado
+**Response 409:** El producto ya está agregado a este menú
+
+---
+
+## PATCH `/menus/:menuId/productos/:productoId/toggle`
+
+Alterna la visibilidad de un producto dentro de un menú (`visible: true ↔ false`).
+
+**Params:**
+| Param      | Tipo   | Descripción            |
+| ---------- | ------ | ---------------------- |
+| menuId     | string | ID cuid del menú       |
+| productoId | number | ID numérico del producto |
+
+**Response 200:**
+```json
+{
+  "id": "clxyz999",
+  "menuId": "clxyz456",
+  "productoId": 1,
+  "visible": false,
+  "createdAt": "2025-05-26T12:05:00.000Z",
+  "producto": {
+    "id": 1,
+    "nombre": "Caldo de gallina",
+    "descripcion": "Plato de entrada caliente",
+    "precio": "5.50",
+    "imagen": "/uploads/imagen.jpg",
+    "categoria": "ENTRADA",
+    "createdAt": "2025-05-25T00:00:00.000Z",
+    "updatedAt": "2025-05-25T00:00:00.000Z"
+  }
+}
+```
+
+**Response 404:** El producto no está asociado a este menú
+
+---
+
+## PATCH `/menus/:menuId/toggle`
+
+Activa o desactiva un menú. Si se **activa**, todos los demás menús se **desactivan** automáticamente (solo uno activo a la vez).
+
+**Params:**
+| Param  | Tipo   | Descripción          |
+| ------ | ------ | -------------------- |
+| menuId | string | ID cuid del menú     |
+
+**Response 200 (activación):**
+```json
+{
+  "id": "clxyz456",
+  "nombre": "Menú Lunes 26 Mayo",
+  "activo": true,
+  "createdAt": "2025-05-26T12:00:00.000Z",
+  "updatedAt": "2025-05-26T12:10:00.000Z"
+}
+```
+
+**Response 200 (desactivación):**
+```json
+{
+  "id": "clxyz456",
+  "nombre": "Menú Lunes 26 Mayo",
+  "activo": false,
+  "createdAt": "2025-05-26T12:00:00.000Z",
+  "updatedAt": "2025-05-26T12:10:00.000Z"
+}
+```
+
+**Response 404:** Menú no encontrado
+
+> ⚠️ Si se activa un menú, todos los demás pasan a `activo = false`.

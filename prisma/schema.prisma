@@ -39,7 +39,7 @@ enum Categoria {
 // ─── Productos ───────────────────────────────────────────
 
 model Producto {
-  id          Int    @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   nombre      String
   descripcion String?
   precio      Decimal   @db.Decimal(10, 2)
@@ -48,5 +48,37 @@ model Producto {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  menus       MenusProductos[]
+
   @@map("productos")
+}
+
+// ─── Menus ───────────────────────────────────────────────
+
+model Menus {
+  id        String   @id @default(cuid())
+  nombre    String
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productos MenusProductos[]
+
+  @@map("menus")
+}
+
+// ─── MenusProductos (pivot) ──────────────────────────────
+
+model MenusProductos {
+  id         String   @id @default(cuid())
+  menuId     String
+  productoId Int
+  visible    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  menu     Menus    @relation(fields: [menuId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+
+  @@unique([menuId, productoId])
+  @@map("menus_productos")
 }
