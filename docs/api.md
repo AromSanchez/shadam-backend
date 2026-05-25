@@ -127,8 +127,6 @@ Aquí la documentación de los nuevos endpoints:
 
 # 🛍️ Productos
 
-Actualiza solo estas partes:
-
 ---
 
 ## POST `/productos`
