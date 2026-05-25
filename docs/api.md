@@ -115,3 +115,94 @@ Cookie: access_token=tu_token
 **Response 401:** Token inválido o ausente
 **Response 403:** No tienes permiso para esto
 **Response 409:** Ya existe un usuario con ese DNI
+
+
+Aquí la documentación de los nuevos endpoints:
+
+
+
+
+
+---
+
+# 🛍️ Productos
+
+## POST `/productos`
+Crea un nuevo producto.
+
+**Request Body:**
+```json
+{
+  "nombre": "Caldo de gallina",
+  "descripcion": "Plato de entrada caliente",
+  "precio": 5.50,
+  "imagen": "https://ejemplo.com/imagen.jpg",
+  "categoria": "ENTRADA"
+}
+```
+
+> `descripcion` e `imagen` son opcionales.
+> `categoria` acepta: `"ENTRADA"` | `"MENU"`
+
+**Response 201:**
+```json
+{
+  "id": "clxyz123",
+  "nombre": "Caldo de gallina",
+  "descripcion": "Plato de entrada caliente",
+  "precio": "5.50",
+  "imagen": "https://ejemplo.com/imagen.jpg",
+  "categoria": "ENTRADA",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
+```
+
+---
+
+## GET `/productos`
+Retorna todos los productos ordenados por fecha de creación (más recientes primero).
+
+**Response 200:**
+```json
+[
+  {
+    "id": "clxyz123",
+    "nombre": "Caldo de gallina",
+    "descripcion": "Plato de entrada caliente",
+    "precio": "5.50",
+    "imagen": "https://ejemplo.com/imagen.jpg",
+    "categoria": "ENTRADA",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]
+```
+
+---
+
+## GET `/productos/:id`
+Retorna un producto por su ID.
+
+**Params:**
+| Param | Tipo   | Descripción        |
+| ----- | ------ | ------------------ |
+| id    | string | ID cuid del producto |
+
+**Response 200:**
+```json
+{
+  "id": "clxyz123",
+  "nombre": "Caldo de gallina",
+  "descripcion": "Plato de entrada caliente",
+  "precio": "5.50",
+  "imagen": "https://ejemplo.com/imagen.jpg",
+  "categoria": "ENTRADA",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
+```
+
+**Response 200 (no encontrado):** `null`
+
+> ⚠️ Nota: actualmente `findOne` retorna `null` si no existe en vez de lanzar un 404.

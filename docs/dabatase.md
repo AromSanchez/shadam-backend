@@ -18,3 +18,26 @@
 | `updated_at`  | `TIMESTAMP`                   | Última actualización                 |
 
 ---
+
+### `productos`
+# 🍽️ Productos Table
+
+| Columna       | Tipo                             | Descripción                            |
+|---------------|----------------------------------|----------------------------------------|
+| `id`          | `TEXT` PK (`cuid()`)             | Identificador único                    |
+| `nombre`      | `TEXT`                           | Nombre del producto                    |
+| `descripcion` | `TEXT` nullable                  | Descripción opcional del producto      |
+| `precio`      | `DECIMAL(10,2)`                  | Precio del producto                    |
+| `imagen`      | `TEXT` nullable                  | URL de la imagen del producto          |
+| `categoria`   | `ENUM` (`ENTRADA`, `MENU`)       | Categoría del producto                 |
+| `createdAt`   | `TIMESTAMP` default `now()`      | Fecha de creación                      |
+| `updatedAt`   | `TIMESTAMP` auto-actualizado     | Última actualización                   |
+
+#### Enum: `Categoria`
+
+| Valor     | Descripción          |
+|-----------|----------------------|
+| `ENTRADA` | Plato de entrada     |
+| `MENU`    | Plato de menú        |
+
+---
