@@ -6,13 +6,13 @@ import { CreateProductoDto } from './dto/create-producto.dto';
 export class ProductosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateProductoDto) {
+  create(dto: CreateProductoDto, imagenUrl?: string) {
     return this.prisma.producto.create({
       data: {
         nombre: dto.nombre,
         descripcion: dto.descripcion,
         precio: dto.precio,
-        imagen: dto.imagen,
+        imagen: imagenUrl,
         categoria: dto.categoria,
       },
     });

@@ -1,5 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsEnum } from 'class-validator';
 import { Categoria } from '../../../generated/prisma/client';
+import { Transform } from 'class-transformer';
 
 export class CreateProductoDto {
   @IsString()
@@ -9,12 +10,9 @@ export class CreateProductoDto {
   @IsString()
   descripcion?: string;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber()
   precio!: number;
-
-  @IsOptional()
-  @IsString()
-  imagen?: string;
 
   @IsEnum(Categoria)
   categoria!: Categoria;

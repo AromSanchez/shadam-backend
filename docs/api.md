@@ -127,36 +127,45 @@ Aquí la documentación de los nuevos endpoints:
 
 # 🛍️ Productos
 
+Actualiza solo estas partes:
+
+---
+
 ## POST `/productos`
-Crea un nuevo producto.
 
-**Request Body:**
-```json
-{
-  "nombre": "Caldo de gallina",
-  "descripcion": "Plato de entrada caliente",
-  "precio": 5.50,
-  "imagen": "https://ejemplo.com/imagen.jpg",
-  "categoria": "ENTRADA"
-}
-```
+**Método:** `POST`
+**URL:** `http://localhost:4000/productos`
+**Body:** `form-data`
 
-> `descripcion` e `imagen` son opcionales.
+| Key | Tipo | Requerido |
+|---|---|---|
+| nombre | text | ✅ |
+| descripcion | text | ❌ |
+| precio | text | ✅ |
+| categoria | text | ✅ |
+| imagen | file | ❌ |
+
 > `categoria` acepta: `"ENTRADA"` | `"MENU"`
+> `precio` se envía como texto, el backend lo convierte a número automáticamente.
 
 **Response 201:**
 ```json
 {
-  "id": "clxyz123",
+  "id": 1,
   "nombre": "Caldo de gallina",
   "descripcion": "Plato de entrada caliente",
   "precio": "5.50",
-  "imagen": "https://ejemplo.com/imagen.jpg",
+  "imagen": "/uploads/1234567890-imagen.jpg",
   "categoria": "ENTRADA",
   "createdAt": "2025-01-01T00:00:00.000Z",
   "updatedAt": "2025-01-01T00:00:00.000Z"
 }
 ```
+
+> `imagen` puede ser `null` si no se envió archivo.
+> La imagen es accesible en `http://localhost:4000/uploads/nombre-archivo.jpg`
+
+---
 
 ---
 
