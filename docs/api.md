@@ -117,6 +117,34 @@ Cookie: access_token=tu_token
 **Response 409:** Ya existe un usuario con ese DNI
 
 
+### GET `/users/pensioners`
+Lista todos los pensionistas. Solo accesible para admin.
+
+**Headers:**
+Cookie: access_token=tu_token
+
+**Response 200:**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Juan Pérez",
+    "email": "12345678",
+    "role": "pensioner",
+    "balance": "0",
+    "first_login": true,
+    "is_active": true,
+    "created_at": "2025-01-01T00:00:00.000Z",
+    "updated_at": "2025-01-01T00:00:00.000Z"
+  }
+]
+```
+
+**Response 401:** Token inválido o ausente
+**Response 403:** No tienes permiso para esto
+
+
 Aquí la documentación de los nuevos endpoints:
 
 

@@ -35,4 +35,22 @@ export class UsersService {
       role: user.role,
     };
   }
+
+  async findPensioners() {
+    return this.prisma.user.findMany({
+      where: { role: 'pensioner' },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        balance: true,
+        first_login: true,
+        is_active: true,
+        created_at: true,
+        updated_at: true,
+      },
+      orderBy: { created_at: 'desc' },
+    });
+  }
 }
