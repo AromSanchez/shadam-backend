@@ -145,6 +145,39 @@ Cookie: access_token=tu_token
 **Response 403:** No tienes permiso para esto
 
 
+### PATCH `/users/:id/toggle`
+Activa o desactiva un pensionista alternando el campo `is_active`. Solo accesible para admin.
+
+**Headers:**
+Cookie: access_token=tu_token
+
+**Params:**
+| Param | Tipo   | Descripción          |
+| ----- | ------ | -------------------- |
+| id    | number | ID numérico del usuario |
+
+**Response 200:**
+
+```json
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "12345678",
+  "role": "pensioner",
+  "balance": "0",
+  "first_login": true,
+  "is_active": false,
+  "created_at": "2025-01-01T00:00:00.000Z",
+  "updated_at": "2025-01-01T00:00:00.000Z"
+}
+```
+
+**Response 400:** Solo se pueden activar o desactivar usuarios pensionistas
+**Response 401:** Token inválido o ausente
+**Response 403:** No tienes permiso para esto
+**Response 404:** Usuario no encontrado
+
+
 Aquí la documentación de los nuevos endpoints:
 
 

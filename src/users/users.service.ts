@@ -1,7 +1,24 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+
+const pensionerSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: true,
+  balance: true,
+  first_login: true,
+  is_active: true,
+  created_at: true,
+  updated_at: true,
+};
 
 @Injectable()
 export class UsersService {
@@ -39,18 +56,31 @@ export class UsersService {
   async findPensioners() {
     return this.prisma.user.findMany({
       where: { role: 'pensioner' },
+      select: pensionerSelect,
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async togglePensioner(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
       select: {
         id: true,
-        name: true,
-        email: true,
         role: true,
-        balance: true,
-        first_login: true,
         is_active: true,
-        created_at: true,
-        updated_at: true,
       },
-      orderBy: { created_at: 'desc' },
+    });
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    if (user.role !== 'pensioner') {
+      throw new BadRequestException('Solo se pueden activar o desactivar usuarios pensionistas');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: { is_active: !user.is_active },
+      select: pensionerSelect,
     });
   }
 }

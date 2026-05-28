@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
@@ -20,5 +29,11 @@ export class UsersController {
   @Roles('admin')
   findPensioners() {
     return this.usersService.findPensioners();
+  }
+
+  @Patch(':id/toggle')
+  @Roles('admin')
+  togglePensioner(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.togglePensioner(id);
   }
 }
