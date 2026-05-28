@@ -13,7 +13,7 @@
     "strict": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "baseUrl": "./",
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -24,5 +24,14 @@
   },
   "ts-node": {
     "esm": false
-  }
+  },
+  "include": ["src/**/*", "lib/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "prisma",
+    "generated",
+    "test-db.ts",
+    "prisma.config.ts"
+  ]
 }
