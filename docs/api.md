@@ -504,3 +504,150 @@ Activa o desactiva un menú. Si se **activa**, todos los demás menús se **desa
 **Response 404:** Menú no encontrado
 
 > ⚠️ Si se activa un menú, todos los demás pasan a `activo = false`.
+
+---
+
+# Pedidos, Pagos y Ventas
+
+Todos los endpoints de esta seccion requieren cookie `access_token` de un usuario con `role = "admin"`.
+
+## Enums
+
+```txt
+OrderType: MESA | PARA_LLEVAR
+CustomerType: REGULAR | PENSIONER
+OrderStatus: ACTIVE | CONFIRMED
+PaymentMethod: EFECTIVO | YAPE
+```
+
+## POST `/pedidos`
+
+Crea un pedido temporal activo. Los productos deben existir en el menu activo y estar visibles.
+
+```json
+{
+  "type": "MESA",
+  "tableNumber": "4",
+  "customerType": "REGULAR",
+  "notes": "Sin cebolla",
+  "items": [
+    {
+      "productoId": 1,
+      "quantity": 2,
+      "isTakeaway": false
+    },
+    {
+      "productoId": 2,
+      "quantity": 1,
+      "isTakeaway": true
+    }
+  ]
+}
+```
+
+Para llevar:
+
+```json
+{
+  "type": "PARA_LLEVAR",
+  "customerType": "REGULAR",
+  "items": [
+    {
+      "productoId": 1,
+      "quantity": 1,
+      "isTakeaway": true
+    }
+  ]
+}
+```
+
+## GET `/pedidos`
+
+Lista pedidos temporales activos o confirmados.
+
+## GET `/pedidos/:id`
+
+Obtiene el detalle de un pedido con items y productos.
+
+## PATCH `/pedidos/:id`
+
+Edita cabecera e items del pedido. Si se envia `items`, reemplaza la lista completa y recalcula el total.
+
+## DELETE `/pedidos/:id`
+
+Elimina un pedido temporal.
+
+```json
+{
+  "message": "Pedido eliminado"
+}
+```
+
+## PATCH `/pedidos/:id/confirmar`
+
+Marca el pedido como `CONFIRMED`. Sigue siendo un pedido temporal hasta que se pague.
+
+## POST `/pedidos/:id/pagar`
+
+Registra uno o varios pagos y convierte el pedido en venta dentro de una transaccion.
+
+Pago efectivo:
+
+```json
+{
+  "payments": [
+    {
+      "method": "EFECTIVO",
+      "amount": 20
+    }
+  ]
+}
+```
+
+Pago Yape:
+
+```json
+{
+  "payments": [
+    {
+      "method": "YAPE",
+      "amount": 20
+    }
+  ]
+}
+```
+
+Pago mixto:
+
+```json
+{
+  "payments": [
+    {
+      "method": "EFECTIVO",
+      "amount": 10
+    },
+    {
+      "method": "YAPE",
+      "amount": 10
+    }
+  ]
+}
+```
+
+Validaciones:
+
+- La suma de pagos debe ser igual al total.
+- La suma de pagos no puede exceder el total.
+- Cada monto debe ser positivo y con maximo 2 decimales.
+
+## POST `/pagos/pedidos/:id`
+
+Alias para registrar pago de un pedido. Usa el mismo body y comportamiento que `POST /pedidos/:id/pagar`.
+
+## GET `/ventas`
+
+Lista ventas finalizadas ordenadas por fecha descendente. Incluye pagos y datos basicos del pensionista cuando aplica.
+
+## GET `/ventas/:id`
+
+Obtiene el detalle completo de una venta con items, productos y pagos.
