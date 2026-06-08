@@ -15,4 +15,13 @@ export declare class AuthService {
     logout(res: any): Promise<{
         message: string;
     }>;
+    me(req: any): Promise<{
+        email: string;
+        id: number;
+        name: string;
+        role: string;
+        balance: import("@prisma/client-runtime-utils").Decimal;
+        first_login: boolean;
+        is_active: boolean;
+    }>;
 }

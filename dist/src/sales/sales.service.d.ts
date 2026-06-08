@@ -4,24 +4,24 @@ export declare class SalesService {
     constructor(prisma: PrismaService);
     findAll(): import("../../generated/prisma/internal/prismaNamespace").PrismaPromise<({
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         payments: {
             id: string;
             createdAt: Date;
-            saleId: string;
             method: import("../../generated/prisma/enums").PaymentMethod;
             amount: import("@prisma/client-runtime-utils").Decimal;
+            saleId: string;
         }[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
         total: import("@prisma/client-runtime-utils").Decimal;
@@ -31,9 +31,9 @@ export declare class SalesService {
     })[]>;
     findOne(id: string): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -42,8 +42,8 @@ export declare class SalesService {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -52,25 +52,25 @@ export declare class SalesService {
             createdAt: Date;
             productoId: number;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
-            saleId: string;
             productName: string;
+            saleId: string;
         })[];
         payments: {
             id: string;
             createdAt: Date;
-            saleId: string;
             method: import("../../generated/prisma/enums").PaymentMethod;
             amount: import("@prisma/client-runtime-utils").Decimal;
+            saleId: string;
         }[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
         total: import("@prisma/client-runtime-utils").Decimal;

@@ -46,6 +46,7 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
+const prismaNamespace_1 = require("../../generated/prisma/internal/prismaNamespace");
 const pensionerSelect = {
     id: true,
     name: true,
@@ -113,6 +114,55 @@ let UsersService = class UsersService {
             data: { is_active: !user.is_active },
             select: pensionerSelect,
         });
+    }
+    async rechargeBalance(id, amount) {
+        if (!amount || amount <= 0) {
+            throw new common_1.BadRequestException('El monto debe ser mayor a 0');
+        }
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, role: true, balance: true },
+        });
+        if (!user)
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        if (user.role !== 'pensioner') {
+            throw new common_1.BadRequestException('Solo se puede recargar saldo a pensionistas');
+        }
+        const newBalance = new prismaNamespace_1.Decimal(user.balance).plus(new prismaNamespace_1.Decimal(amount));
+        return this.prisma.user.update({
+            where: { id },
+            data: { balance: newBalance },
+            select: pensionerSelect,
+        });
+    }
+    async consumeBalance(id, amount, description) {
+        if (!amount || amount <= 0) {
+            throw new common_1.BadRequestException('El monto debe ser mayor a 0');
+        }
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, role: true, balance: true, name: true },
+        });
+        if (!user)
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        if (user.role !== 'pensioner') {
+            throw new common_1.BadRequestException('Solo se puede consumir saldo de pensionistas');
+        }
+        const currentBalance = new prismaNamespace_1.Decimal(user.balance);
+        if (currentBalance.lessThan(new prismaNamespace_1.Decimal(amount))) {
+            throw new common_1.BadRequestException(`Saldo insuficiente. Saldo actual: S/ ${currentBalance.toFixed(2)}, monto requerido: S/ ${amount.toFixed(2)}`);
+        }
+        const newBalance = currentBalance.minus(new prismaNamespace_1.Decimal(amount));
+        const updated = await this.prisma.user.update({
+            where: { id },
+            data: { balance: newBalance },
+            select: pensionerSelect,
+        });
+        return {
+            ...updated,
+            consumed: amount,
+            description: description || 'Consumo de pedido',
+        };
     }
 };
 exports.UsersService = UsersService;

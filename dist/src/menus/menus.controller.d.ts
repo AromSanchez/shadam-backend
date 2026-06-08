@@ -18,17 +18,17 @@ export declare class MenusController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: string;
             createdAt: Date;
+            visible: boolean;
             menuId: string;
             productoId: number;
-            visible: boolean;
         })[];
     } & {
         id: string;
@@ -44,17 +44,17 @@ export declare class MenusController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: string;
             createdAt: Date;
+            visible: boolean;
             menuId: string;
             productoId: number;
-            visible: boolean;
         })[];
     } & {
         id: string;
@@ -69,17 +69,17 @@ export declare class MenusController {
             nombre: string;
             descripcion: string | null;
             precio: import("@prisma/client-runtime-utils").Decimal;
-            imagen: string | null;
             categoria: import("../../generated/prisma/enums").Categoria;
+            imagen: string | null;
             createdAt: Date;
             updatedAt: Date;
         };
     } & {
         id: string;
         createdAt: Date;
+        visible: boolean;
         menuId: string;
         productoId: number;
-        visible: boolean;
     }>;
     toggleProducto(menuId: string, productoId: number): Promise<{
         producto: {
@@ -87,17 +87,17 @@ export declare class MenusController {
             nombre: string;
             descripcion: string | null;
             precio: import("@prisma/client-runtime-utils").Decimal;
-            imagen: string | null;
             categoria: import("../../generated/prisma/enums").Categoria;
+            imagen: string | null;
             createdAt: Date;
             updatedAt: Date;
         };
     } & {
         id: string;
         createdAt: Date;
+        visible: boolean;
         menuId: string;
         productoId: number;
-        visible: boolean;
     }>;
     toggleMenu(menuId: string): Promise<{
         id: string;

@@ -36,4 +36,22 @@ export class UsersController {
   togglePensioner(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.togglePensioner(id);
   }
+
+  @Patch(':id/balance')
+  @Roles('admin')
+  rechargeBalance(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { amount: number },
+  ) {
+    return this.usersService.rechargeBalance(id, body.amount);
+  }
+
+  @Post(':id/consume')
+  @Roles('admin')
+  consumeBalance(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { amount: number; description?: string },
+  ) {
+    return this.usersService.consumeBalance(id, body.amount, body.description);
+  }
 }

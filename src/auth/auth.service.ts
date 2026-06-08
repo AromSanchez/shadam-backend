@@ -80,4 +80,24 @@ export class AuthService {
         res.clearCookie('refresh_token');
         return { message: 'Sesión cerrada' };
     }
+
+    async me(req: any) {
+        const payload = req.user;
+        const user = await this.prisma.user.findUnique({
+            where: { id: payload.sub },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                balance: true,
+                first_login: true,
+                is_active: true,
+            },
+        });
+
+        if (!user) throw new UnauthorizedException('Usuario no encontrado');
+
+        return user;
+    }
 }

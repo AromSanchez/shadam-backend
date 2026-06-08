@@ -33,6 +33,12 @@ let UsersController = class UsersController {
     togglePensioner(id) {
         return this.usersService.togglePensioner(id);
     }
+    rechargeBalance(id, body) {
+        return this.usersService.rechargeBalance(id, body.amount);
+    }
+    consumeBalance(id, body) {
+        return this.usersService.consumeBalance(id, body.amount, body.description);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -58,6 +64,24 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "togglePensioner", null);
+__decorate([
+    (0, common_1.Patch)(':id/balance'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "rechargeBalance", null);
+__decorate([
+    (0, common_1.Post)(':id/consume'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "consumeBalance", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),

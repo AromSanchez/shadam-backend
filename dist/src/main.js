@@ -11,9 +11,10 @@ const path_1 = require("path");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: '*',
+        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        allowedHeaders: '*',
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+        credentials: true,
     });
     app.use((0, cookie_parser_1.default)());
     app.useGlobalPipes(new common_1.ValidationPipe({

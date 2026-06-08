@@ -8,8 +8,8 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        imagen: string | null;
         categoria: import("../../generated/prisma/enums").Categoria;
+        imagen: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
@@ -20,8 +20,8 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        imagen: string | null;
         categoria: import("../../generated/prisma/enums").Categoria;
+        imagen: string | null;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -30,8 +30,8 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        imagen: string | null;
         categoria: import("../../generated/prisma/enums").Categoria;
+        imagen: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null, null, import("@prisma/client/runtime/client").DefaultArgs, {

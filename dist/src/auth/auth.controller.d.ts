@@ -14,4 +14,13 @@ export declare class AuthController {
     logout(res: Response): Promise<{
         message: string;
     }>;
+    me(req: Request): Promise<{
+        email: string;
+        id: number;
+        name: string;
+        role: string;
+        balance: import("@prisma/client-runtime-utils").Decimal;
+        first_login: boolean;
+        is_active: boolean;
+    }>;
 }

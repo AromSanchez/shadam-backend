@@ -7,9 +7,9 @@ export declare class OrdersController {
     constructor(ordersService: OrdersService);
     create(dto: CreateOrderDto): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -18,8 +18,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -28,29 +28,29 @@ export declare class OrdersController {
             createdAt: Date;
             updatedAt: Date;
             productoId: number;
-            orderId: string;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
+            orderId: string;
         })[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
+        notes: string | null;
         status: import("../../generated/prisma/enums").OrderStatus;
         total: import("@prisma/client-runtime-utils").Decimal;
-        notes: string | null;
     }>;
     findAll(): import("../../generated/prisma/internal/prismaNamespace").PrismaPromise<({
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -59,8 +59,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -69,29 +69,29 @@ export declare class OrdersController {
             createdAt: Date;
             updatedAt: Date;
             productoId: number;
-            orderId: string;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
+            orderId: string;
         })[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
+        notes: string | null;
         status: import("../../generated/prisma/enums").OrderStatus;
         total: import("@prisma/client-runtime-utils").Decimal;
-        notes: string | null;
     })[]>;
     findOne(id: string): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -100,8 +100,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -110,29 +110,29 @@ export declare class OrdersController {
             createdAt: Date;
             updatedAt: Date;
             productoId: number;
-            orderId: string;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
+            orderId: string;
         })[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
+        notes: string | null;
         status: import("../../generated/prisma/enums").OrderStatus;
         total: import("@prisma/client-runtime-utils").Decimal;
-        notes: string | null;
     }>;
     update(id: string, dto: UpdateOrderDto): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -141,8 +141,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -151,32 +151,32 @@ export declare class OrdersController {
             createdAt: Date;
             updatedAt: Date;
             productoId: number;
-            orderId: string;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
+            orderId: string;
         })[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
+        notes: string | null;
         status: import("../../generated/prisma/enums").OrderStatus;
         total: import("@prisma/client-runtime-utils").Decimal;
-        notes: string | null;
     }>;
     remove(id: string): Promise<{
         message: string;
     }>;
     confirm(id: string): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -185,8 +185,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -195,29 +195,29 @@ export declare class OrdersController {
             createdAt: Date;
             updatedAt: Date;
             productoId: number;
-            orderId: string;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
+            orderId: string;
         })[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
+        notes: string | null;
         status: import("../../generated/prisma/enums").OrderStatus;
         total: import("@prisma/client-runtime-utils").Decimal;
-        notes: string | null;
     }>;
     checkout(id: string, dto: RegisterPaymentDto): Promise<{
         pensioner: {
+            email: string;
             id: number;
             name: string;
-            email: string;
             role: string;
         } | null;
         items: ({
@@ -226,8 +226,8 @@ export declare class OrdersController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                imagen: string | null;
                 categoria: import("../../generated/prisma/enums").Categoria;
+                imagen: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -236,25 +236,25 @@ export declare class OrdersController {
             createdAt: Date;
             productoId: number;
             quantity: number;
+            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            isTakeaway: boolean;
-            saleId: string;
             productName: string;
+            saleId: string;
         })[];
         payments: {
             id: string;
             createdAt: Date;
-            saleId: string;
             method: import("../../generated/prisma/enums").PaymentMethod;
             amount: import("@prisma/client-runtime-utils").Decimal;
+            saleId: string;
         }[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        tableNumber: string | null;
         type: import("../../generated/prisma/enums").OrderType;
+        tableNumber: string | null;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
         total: import("@prisma/client-runtime-utils").Decimal;
