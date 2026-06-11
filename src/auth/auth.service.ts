@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -100,8 +101,34 @@ export class AuthService {
 
         if (!user) throw new UnauthorizedException('Usuario no encontrado');
 
+        // If pensioner has no qr_token, generate one
+        let currentUser = user;
+        if (user.role === 'pensioner' && !user.qr_token) {
+            let qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+            let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+            while (tokenExists) {
+                qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+                tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+            }
+            currentUser = await this.prisma.user.update({
+                where: { id: user.id },
+                data: { qr_token: qrToken },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                    pensioner_type: true,
+                    qr_token: true,
+                    balance: true,
+                    first_login: true,
+                    is_active: true,
+                },
+            });
+        }
+
         // If pensioner, also return today's consumptions
-        if (user.role === 'pensioner') {
+        if (currentUser.role === 'pensioner') {
             const todayStart = new Date();
             todayStart.setHours(0, 0, 0, 0);
             const todayEnd = new Date();
@@ -109,14 +136,14 @@ export class AuthService {
 
             const todayConsumptions = await this.prisma.consumption.findMany({
                 where: {
-                    userId: user.id,
+                    userId: currentUser.id,
                     date: { gte: todayStart, lte: todayEnd },
                 },
                 orderBy: { date: 'asc' },
             });
 
             return {
-                ...user,
+                ...currentUser,
                 todayConsumptions: todayConsumptions.map(c => ({
                     mealType: c.mealType,
                     amount: c.amount,
@@ -125,6 +152,6 @@ export class AuthService {
             };
         }
 
-        return user;
+        return currentUser;
     }
 }
