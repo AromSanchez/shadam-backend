@@ -10,9 +10,9 @@ export declare class UsersController {
         role: string;
     }>;
     findPensioners(): Promise<{
-        email: string;
         id: number;
         name: string;
+        email: string;
         role: string;
         balance: import("@prisma/client-runtime-utils").Decimal;
         first_login: boolean;
@@ -21,9 +21,9 @@ export declare class UsersController {
         updated_at: Date;
     }[]>;
     togglePensioner(id: number): Promise<{
-        email: string;
         id: number;
         name: string;
+        email: string;
         role: string;
         balance: import("@prisma/client-runtime-utils").Decimal;
         first_login: boolean;
@@ -34,9 +34,9 @@ export declare class UsersController {
     rechargeBalance(id: number, body: {
         amount: number;
     }): Promise<{
-        email: string;
         id: number;
         name: string;
+        email: string;
         role: string;
         balance: import("@prisma/client-runtime-utils").Decimal;
         first_login: boolean;
@@ -50,9 +50,9 @@ export declare class UsersController {
     }): Promise<{
         consumed: number;
         description: string;
-        email: string;
         id: number;
         name: string;
+        email: string;
         role: string;
         balance: import("@prisma/client-runtime-utils").Decimal;
         first_login: boolean;

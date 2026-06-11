@@ -5,9 +5,9 @@ export declare class PaymentsController {
     constructor(ordersService: OrdersService);
     register(id: string, dto: RegisterPaymentDto): Promise<{
         pensioner: {
-            email: string;
             id: number;
             name: string;
+            email: string;
             role: string;
         } | null;
         items: ({
@@ -16,35 +16,35 @@ export declare class PaymentsController {
                 nombre: string;
                 descripcion: string | null;
                 precio: import("@prisma/client-runtime-utils").Decimal;
-                categoria: import("../../generated/prisma/enums").Categoria;
                 imagen: string | null;
+                categoria: import("../../generated/prisma/enums").Categoria;
                 createdAt: Date;
                 updatedAt: Date;
-            };
+            } | null;
         } & {
             id: string;
             createdAt: Date;
-            productoId: number;
+            productoId: number | null;
             quantity: number;
-            isTakeaway: boolean;
             unitPrice: import("@prisma/client-runtime-utils").Decimal;
             subtotal: import("@prisma/client-runtime-utils").Decimal;
-            productName: string;
+            isTakeaway: boolean;
             saleId: string;
+            productName: string;
         })[];
         payments: {
             id: string;
             createdAt: Date;
+            saleId: string;
             method: import("../../generated/prisma/enums").PaymentMethod;
             amount: import("@prisma/client-runtime-utils").Decimal;
-            saleId: string;
         }[];
     } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        type: import("../../generated/prisma/enums").OrderType;
         tableNumber: string | null;
+        type: import("../../generated/prisma/enums").OrderType;
         customerType: import("../../generated/prisma/enums").CustomerType;
         pensionerId: number | null;
         total: import("@prisma/client-runtime-utils").Decimal;

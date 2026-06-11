@@ -1,5 +1,6 @@
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
+import { UpdateProductoDto } from './dto/update-producto.dto';
 export declare class ProductosController {
     private readonly productosService;
     constructor(productosService: ProductosService);
@@ -8,8 +9,8 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        categoria: import("../../generated/prisma/enums").Categoria;
         imagen: string | null;
+        categoria: import("../../generated/prisma/enums").Categoria;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
@@ -20,8 +21,8 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        categoria: import("../../generated/prisma/enums").Categoria;
         imagen: string | null;
+        categoria: import("../../generated/prisma/enums").Categoria;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -30,11 +31,24 @@ export declare class ProductosController {
         nombre: string;
         descripcion: string | null;
         precio: import("@prisma/client-runtime-utils").Decimal;
-        categoria: import("../../generated/prisma/enums").Categoria;
         imagen: string | null;
+        categoria: import("../../generated/prisma/enums").Categoria;
         createdAt: Date;
         updatedAt: Date;
     } | null, null, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
+    }>;
+    update(id: string, dto: UpdateProductoDto, file: Express.Multer.File): Promise<{
+        id: number;
+        nombre: string;
+        descripcion: string | null;
+        precio: import("@prisma/client-runtime-utils").Decimal;
+        imagen: string | null;
+        categoria: import("../../generated/prisma/enums").Categoria;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    remove(id: string): Promise<{
+        message: string;
     }>;
 }

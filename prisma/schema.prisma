@@ -82,7 +82,7 @@ model MenusProductos {
   createdAt  DateTime @default(now())
 
   menu     Menus    @relation(fields: [menuId], references: [id])
-  producto Producto @relation(fields: [productoId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
   @@unique([menuId, productoId])
   @@map("menus_productos")
@@ -141,7 +141,7 @@ model OrderItem {
   updatedAt   DateTime @updatedAt
 
   order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  producto Producto @relation(fields: [productoId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
   @@index([productoId])
@@ -174,7 +174,7 @@ model Sale {
 model SaleItem {
   id          String   @id @default(cuid())
   saleId      String
-  productoId  Int
+  productoId  Int?
   productName String
   quantity    Int
   unitPrice   Decimal  @db.Decimal(10, 2)
@@ -182,8 +182,8 @@ model SaleItem {
   isTakeaway  Boolean  @default(false)
   createdAt   DateTime @default(now())
 
-  sale     Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  producto Producto @relation(fields: [productoId], references: [id])
+  sale     Sale      @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  producto Producto? @relation(fields: [productoId], references: [id], onDelete: SetNull)
 
   @@index([saleId])
   @@index([productoId])

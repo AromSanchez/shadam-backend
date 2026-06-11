@@ -327,6 +327,10 @@ export type ProductoScalarRelationFilter = {
     is?: Prisma.ProductoWhereInput;
     isNot?: Prisma.ProductoWhereInput;
 };
+export type ProductoNullableScalarRelationFilter = {
+    is?: Prisma.ProductoWhereInput | null;
+    isNot?: Prisma.ProductoWhereInput | null;
+};
 export type EnumCategoriaFieldUpdateOperationsInput = {
     set?: $Enums.Categoria;
 };
@@ -359,10 +363,12 @@ export type ProductoCreateNestedOneWithoutSaleItemsInput = {
     connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutSaleItemsInput;
     connect?: Prisma.ProductoWhereUniqueInput;
 };
-export type ProductoUpdateOneRequiredWithoutSaleItemsNestedInput = {
+export type ProductoUpdateOneWithoutSaleItemsNestedInput = {
     create?: Prisma.XOR<Prisma.ProductoCreateWithoutSaleItemsInput, Prisma.ProductoUncheckedCreateWithoutSaleItemsInput>;
     connectOrCreate?: Prisma.ProductoCreateOrConnectWithoutSaleItemsInput;
     upsert?: Prisma.ProductoUpsertWithoutSaleItemsInput;
+    disconnect?: Prisma.ProductoWhereInput | boolean;
+    delete?: Prisma.ProductoWhereInput | boolean;
     connect?: Prisma.ProductoWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.ProductoUpdateToOneWithWhereWithoutSaleItemsInput, Prisma.ProductoUpdateWithoutSaleItemsInput>, Prisma.ProductoUncheckedUpdateWithoutSaleItemsInput>;
 };

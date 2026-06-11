@@ -277,6 +277,90 @@ Retorna un producto por su ID.
 
 ---
 
+## PATCH `/productos/:id`
+
+Actualiza parcialmente un producto existente. Solo se modifican los campos enviados.
+
+**Método:** `PATCH`
+**URL:** `http://localhost:4000/productos/:id`
+**Body:** `form-data` (permite actualizar imagen) o `JSON`
+
+**Params:**
+| Param | Tipo   | Descripción              |
+| ----- | ------ | ------------------------ |
+| id    | number | ID numérico del producto |
+
+| Key         | Tipo | Requerido |
+|-------------|------|-----------|
+| nombre      | text | ❌        |
+| descripcion | text | ❌        |
+| precio      | text | ❌        |
+| categoria   | text | ❌        |
+| imagen      | file | ❌        |
+
+> `categoria` acepta: `"ENTRADA"` | `"MENU"`
+> Solo los campos enviados se actualizan; los demás permanecen sin cambios.
+> Si se envía una nueva imagen, la imagen anterior se elimina del servidor.
+
+**Response 200:**
+```json
+{
+  "id": 1,
+  "nombre": "Caldo de gallina actualizado",
+  "descripcion": "Nueva descripción",
+  "precio": "7.00",
+  "imagen": "/uploads/1234567890-imagen.jpg",
+  "categoria": "ENTRADA",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-02T00:00:00.000Z"
+}
+```
+
+**Response 404:**
+```json
+{
+  "statusCode": 404,
+  "message": "Producto con id 99 no encontrado"
+}
+```
+
+---
+
+## DELETE `/productos/:id`
+
+Elimina un producto del catálogo. Al eliminarse:
+- Se remueve automáticamente de **todos los menús** donde estaba asociado.
+- Se eliminan los **items de pedidos activos** que contenían este producto.
+- Las **ventas históricas** conservan el nombre del producto (snapshot `productName`) y el `productoId` se establece en `null`.
+- Se elimina la **imagen** del servidor si existía.
+
+**Método:** `DELETE`
+**URL:** `http://localhost:4000/productos/:id`
+
+**Params:**
+| Param | Tipo   | Descripción              |
+| ----- | ------ | ------------------------ |
+| id    | number | ID numérico del producto |
+
+**Response 200:**
+```json
+{
+  "message": "Producto eliminado"
+}
+```
+
+**Response 404:**
+```json
+{
+  "statusCode": 404,
+  "message": "Producto con id 99 no encontrado"
+}
+```
+
+> ⚠️ Esta acción es irreversible. Los pedidos activos que contenían el producto perderán esos items.
+
+---
+
 # 📋 Menús
 
 ---

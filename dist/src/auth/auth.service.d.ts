@@ -16,9 +16,9 @@ export declare class AuthService {
         message: string;
     }>;
     me(req: any): Promise<{
-        email: string;
         id: number;
         name: string;
+        email: string;
         role: string;
         balance: import("@prisma/client-runtime-utils").Decimal;
         first_login: boolean;

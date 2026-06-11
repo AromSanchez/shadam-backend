@@ -19,6 +19,7 @@ const multer_1 = require("multer");
 const path_1 = require("path");
 const productos_service_1 = require("./productos.service");
 const create_producto_dto_1 = require("./dto/create-producto.dto");
+const update_producto_dto_1 = require("./dto/update-producto.dto");
 let ProductosController = class ProductosController {
     productosService;
     constructor(productosService) {
@@ -33,6 +34,13 @@ let ProductosController = class ProductosController {
     }
     findOne(id) {
         return this.productosService.findOne(+id);
+    }
+    update(id, dto, file) {
+        const imagenUrl = file ? `/uploads/${file.filename}` : undefined;
+        return this.productosService.update(+id, dto, imagenUrl);
+    }
+    remove(id) {
+        return this.productosService.remove(+id);
     }
 };
 exports.ProductosController = ProductosController;
@@ -66,6 +74,31 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], ProductosController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('imagen', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                cb(null, unique + (0, path_1.extname)(file.originalname));
+            },
+        }),
+    })),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_producto_dto_1.UpdateProductoDto, Object]),
+    __metadata("design:returntype", void 0)
+], ProductosController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductosController.prototype, "remove", null);
 exports.ProductosController = ProductosController = __decorate([
     (0, common_1.Controller)('productos'),
     __metadata("design:paramtypes", [productos_service_1.ProductosService])
