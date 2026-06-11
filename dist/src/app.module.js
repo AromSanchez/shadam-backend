@@ -20,6 +20,7 @@ const payments_module_1 = require("./payments/payments.module");
 const sales_module_1 = require("./sales/sales.module");
 const consumptions_module_1 = require("./consumptions/consumptions.module");
 const config_module_1 = require("./config/config.module");
+const reports_module_1 = require("./reports/reports.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +37,7 @@ exports.AppModule = AppModule = __decorate([
             sales_module_1.SalesModule,
             consumptions_module_1.ConsumptionsModule,
             config_module_1.ConfigModule,
+            reports_module_1.ReportsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

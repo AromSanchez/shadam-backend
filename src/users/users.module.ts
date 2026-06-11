@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { UsersImportController } from './users-import.controller';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
@@ -9,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
     }),
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, UsersImportController],
   providers: [UsersService],
 })
 export class UsersModule {}

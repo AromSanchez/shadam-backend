@@ -11,6 +11,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { SalesModule } from './sales/sales.module';
 import { ConsumptionsModule } from './consumptions/consumptions.module';
 import { ConfigModule } from './config/config.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ConfigModule } from './config/config.module';
     SalesModule,
     ConsumptionsModule,
     ConfigModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

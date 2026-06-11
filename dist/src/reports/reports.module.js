@@ -6,24 +6,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersModule = void 0;
+exports.ReportsModule = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("./users.service");
-const users_controller_1 = require("./users.controller");
-const users_import_controller_1 = require("./users-import.controller");
 const jwt_1 = require("@nestjs/jwt");
-let UsersModule = class UsersModule {
+const reports_controller_1 = require("./reports.controller");
+const reports_service_1 = require("./reports.service");
+let ReportsModule = class ReportsModule {
 };
-exports.UsersModule = UsersModule;
-exports.UsersModule = UsersModule = __decorate([
+exports.ReportsModule = ReportsModule;
+exports.ReportsModule = ReportsModule = __decorate([
     (0, common_1.Module)({
         imports: [
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET,
             }),
         ],
-        controllers: [users_controller_1.UsersController, users_import_controller_1.UsersImportController],
-        providers: [users_service_1.UsersService],
+        controllers: [reports_controller_1.ReportsController],
+        providers: [reports_service_1.ReportsService],
     })
-], UsersModule);
-//# sourceMappingURL=users.module.js.map
+], ReportsModule);
+//# sourceMappingURL=reports.module.js.map

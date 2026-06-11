@@ -117,4 +117,36 @@ export declare class UsersController {
         created_at: Date;
         updated_at: Date;
     }>;
+    getMovements(id: number, limit?: string): Promise<{
+        user: {
+            id: number;
+            name: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+        };
+        movements: {
+            id: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+            createdAt: Date;
+            type: import("../../generated/prisma/enums").MovementType;
+            amount: import("@prisma/client-runtime-utils").Decimal;
+            userId: number;
+            description: string | null;
+        }[];
+    }>;
+    getMyMovements(req: any, limit?: string): Promise<{
+        user: {
+            id: number;
+            name: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+        };
+        movements: {
+            id: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+            createdAt: Date;
+            type: import("../../generated/prisma/enums").MovementType;
+            amount: import("@prisma/client-runtime-utils").Decimal;
+            userId: number;
+            description: string | null;
+        }[];
+    }>;
 }

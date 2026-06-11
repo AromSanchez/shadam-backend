@@ -50,6 +50,12 @@ let UsersController = class UsersController {
         const userId = req.user.sub;
         return this.usersService.skipOnboarding(userId);
     }
+    getMovements(id, limit) {
+        return this.usersService.getMovements(id, limit ? parseInt(limit) : 50);
+    }
+    getMyMovements(req, limit) {
+        return this.usersService.getMovements(req.user.sub, limit ? parseInt(limit) : 50);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -118,6 +124,24 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "skipOnboarding", null);
+__decorate([
+    (0, common_1.Get)(':id/movements'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMovements", null);
+__decorate([
+    (0, common_1.Get)('me/movements'),
+    (0, roles_decorator_1.Roles)('pensioner'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMyMovements", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),

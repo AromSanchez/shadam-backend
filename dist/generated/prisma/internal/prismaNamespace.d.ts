@@ -168,6 +168,7 @@ export declare const ModelName: {
     readonly SalePayment: "SalePayment";
     readonly Consumption: "Consumption";
     readonly PriceConfig: "PriceConfig";
+    readonly BalanceMovement: "BalanceMovement";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -180,7 +181,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "user" | "producto" | "menus" | "menusProductos" | "order" | "orderItem" | "sale" | "saleItem" | "salePayment" | "consumption" | "priceConfig";
+        modelProps: "user" | "producto" | "menus" | "menusProductos" | "order" | "orderItem" | "sale" | "saleItem" | "salePayment" | "consumption" | "priceConfig" | "balanceMovement";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -998,6 +999,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        BalanceMovement: {
+            payload: Prisma.$BalanceMovementPayload<ExtArgs>;
+            fields: Prisma.BalanceMovementFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.BalanceMovementFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.BalanceMovementFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                findFirst: {
+                    args: Prisma.BalanceMovementFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.BalanceMovementFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                findMany: {
+                    args: Prisma.BalanceMovementFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>[];
+                };
+                create: {
+                    args: Prisma.BalanceMovementCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                createMany: {
+                    args: Prisma.BalanceMovementCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.BalanceMovementCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>[];
+                };
+                delete: {
+                    args: Prisma.BalanceMovementDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                update: {
+                    args: Prisma.BalanceMovementUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.BalanceMovementDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.BalanceMovementUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.BalanceMovementUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>[];
+                };
+                upsert: {
+                    args: Prisma.BalanceMovementUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$BalanceMovementPayload>;
+                };
+                aggregate: {
+                    args: Prisma.BalanceMovementAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateBalanceMovement>;
+                };
+                groupBy: {
+                    args: Prisma.BalanceMovementGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.BalanceMovementGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.BalanceMovementCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.BalanceMovementCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -1146,6 +1221,16 @@ export declare const PriceConfigScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type PriceConfigScalarFieldEnum = (typeof PriceConfigScalarFieldEnum)[keyof typeof PriceConfigScalarFieldEnum];
+export declare const BalanceMovementScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly type: "type";
+    readonly amount: "amount";
+    readonly balance: "balance";
+    readonly description: "description";
+    readonly createdAt: "createdAt";
+};
+export type BalanceMovementScalarFieldEnum = (typeof BalanceMovementScalarFieldEnum)[keyof typeof BalanceMovementScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -1184,6 +1269,8 @@ export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>;
 export type EnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType'>;
 export type ListEnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType[]'>;
+export type EnumMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MovementType'>;
+export type ListEnumMovementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MovementType[]'>;
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>;
 export type BatchPayload = {
@@ -1222,6 +1309,7 @@ export type GlobalOmitConfig = {
     salePayment?: Prisma.SalePaymentOmit;
     consumption?: Prisma.ConsumptionOmit;
     priceConfig?: Prisma.PriceConfigOmit;
+    balanceMovement?: Prisma.BalanceMovementOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

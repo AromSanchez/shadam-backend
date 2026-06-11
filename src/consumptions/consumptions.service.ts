@@ -80,10 +80,23 @@ export class ConsumptionsService {
         );
       }
 
+      const newBalance = new Decimal(user.balance).minus(amountCharged);
+
       // Deduct immediately
       await this.prisma.user.update({
         where: { id: userId },
-        data: { balance: new Decimal(user.balance).minus(amountCharged) },
+        data: { balance: newBalance },
+      });
+
+      // Register balance movement
+      await this.prisma.balanceMovement.create({
+        data: {
+          userId,
+          type: 'CONSUMO',
+          amount: -Number(amountCharged),
+          balance: newBalance,
+          description: `Consumo ${mealType.toLowerCase()} -S/ ${amountCharged.toFixed(2)}`,
+        },
       });
     } else {
       // ESTUDIANTE: check if this will be the 3rd consumption → charge
@@ -104,9 +117,22 @@ export class ConsumptionsService {
           );
         }
 
+        const newBalance = new Decimal(user.balance).minus(amountCharged);
+
         await this.prisma.user.update({
           where: { id: userId },
-          data: { balance: new Decimal(user.balance).minus(amountCharged) },
+          data: { balance: newBalance },
+        });
+
+        // Register balance movement
+        await this.prisma.balanceMovement.create({
+          data: {
+            userId,
+            type: 'CONSUMO',
+            amount: -Number(amountCharged),
+            balance: newBalance,
+            description: `Cobro por 3 consumos (estudiante) -S/ ${amountCharged.toFixed(2)}`,
+          },
         });
       }
     }

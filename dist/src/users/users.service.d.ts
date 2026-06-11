@@ -114,4 +114,20 @@ export declare class UsersService {
         created_at: Date;
         updated_at: Date;
     }>;
+    getMovements(id: number, limit?: number): Promise<{
+        user: {
+            id: number;
+            name: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+        };
+        movements: {
+            id: string;
+            balance: import("@prisma/client-runtime-utils").Decimal;
+            createdAt: Date;
+            type: import("../../generated/prisma/enums").MovementType;
+            amount: import("@prisma/client-runtime-utils").Decimal;
+            userId: number;
+            description: string | null;
+        }[];
+    }>;
 }

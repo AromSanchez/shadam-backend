@@ -7,7 +7,6 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
 import { Decimal } from '../../generated/prisma/internal/prismaNamespace';
 import { PensionerType } from '../../generated/prisma/client';
 
@@ -31,9 +30,48 @@ export class UsersService {
 
   /**
    * Generate a unique QR token for a pensionista
+   * Format: PEN-001, PEN-002, PEN-003... (autoincremental)
    */
-  private generateQrToken(): string {
-    return `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+  private async generateQrToken(): Promise<string> {
+    // Find the highest existing PEN-XXX number
+    const lastUser = await this.prisma.user.findFirst({
+      where: {
+        qr_token: { startsWith: 'PEN-' },
+      },
+      orderBy: { id: 'desc' },
+      select: { qr_token: true },
+    });
+
+    let nextNum = 1;
+
+    if (lastUser?.qr_token) {
+      const match = lastUser.qr_token.match(/^PEN-(\d+)$/);
+      if (match) {
+        nextNum = parseInt(match[1], 10) + 1;
+      } else {
+        // If format doesn't match (old tokens), count total pensioners
+        const count = await this.prisma.user.count({
+          where: { qr_token: { startsWith: 'PEN-' } },
+        });
+        nextNum = count + 1;
+      }
+    }
+
+    // Pad to at least 3 digits
+    const token = `PEN-${String(nextNum).padStart(3, '0')}`;
+
+    // Verify uniqueness (shouldn't fail but just in case)
+    const exists = await this.prisma.user.findUnique({ where: { qr_token: token } });
+    if (exists) {
+      // Fallback: find next available
+      for (let i = nextNum + 1; i < nextNum + 100; i++) {
+        const t = `PEN-${String(i).padStart(3, '0')}`;
+        const taken = await this.prisma.user.findUnique({ where: { qr_token: t } });
+        if (!taken) return t;
+      }
+    }
+
+    return token;
   }
 
   async createPensioner(dto: CreateUserDto) {
@@ -45,13 +83,8 @@ export class UsersService {
 
     const hashed = await bcrypt.hash(dto.dni, 10);
 
-    // Generate unique QR token
-    let qrToken = this.generateQrToken();
-    let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
-    while (tokenExists) {
-      qrToken = this.generateQrToken();
-      tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
-    }
+    // Generate unique QR token (autoincremental)
+    const qrToken = await this.generateQrToken();
 
     const user = await this.prisma.user.create({
       data: {
@@ -134,11 +167,24 @@ export class UsersService {
 
     const newBalance = new Decimal(user.balance).plus(new Decimal(amount));
 
-    return this.prisma.user.update({
+    const updated = await this.prisma.user.update({
       where: { id },
       data: { balance: newBalance },
       select: pensionerSelect,
     });
+
+    // Register balance movement
+    await this.prisma.balanceMovement.create({
+      data: {
+        userId: id,
+        type: 'RECARGA',
+        amount: amount,
+        balance: newBalance,
+        description: `Recarga de saldo +S/ ${amount.toFixed(2)}`,
+      },
+    });
+
+    return updated;
   }
 
   /**
@@ -172,6 +218,17 @@ export class UsersService {
       where: { id },
       data: { balance: newBalance },
       select: pensionerSelect,
+    });
+
+    // Register balance movement
+    await this.prisma.balanceMovement.create({
+      data: {
+        userId: id,
+        type: 'CONSUMO',
+        amount: -amount,
+        balance: newBalance,
+        description: description || 'Consumo de pedido',
+      },
     });
 
     return {
@@ -222,5 +279,28 @@ export class UsersService {
       data: { first_login: false },
       select: pensionerSelect,
     });
+  }
+
+  /**
+   * Get balance movements for a pensionista
+   */
+  async getMovements(id: number, limit: number = 50) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true, role: true, name: true, balance: true },
+    });
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    const movements = await this.prisma.balanceMovement.findMany({
+      where: { userId: id },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    });
+
+    return {
+      user: { id: user.id, name: user.name, balance: user.balance },
+      movements,
+    };
   }
 }

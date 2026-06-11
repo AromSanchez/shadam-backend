@@ -46,7 +46,6 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
-const crypto = __importStar(require("crypto"));
 const prismaNamespace_1 = require("../../generated/prisma/internal/prismaNamespace");
 const client_1 = require("../../generated/prisma/client");
 const pensionerSelect = {
@@ -67,8 +66,38 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    generateQrToken() {
-        return `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+    async generateQrToken() {
+        const lastUser = await this.prisma.user.findFirst({
+            where: {
+                qr_token: { startsWith: 'PEN-' },
+            },
+            orderBy: { id: 'desc' },
+            select: { qr_token: true },
+        });
+        let nextNum = 1;
+        if (lastUser?.qr_token) {
+            const match = lastUser.qr_token.match(/^PEN-(\d+)$/);
+            if (match) {
+                nextNum = parseInt(match[1], 10) + 1;
+            }
+            else {
+                const count = await this.prisma.user.count({
+                    where: { qr_token: { startsWith: 'PEN-' } },
+                });
+                nextNum = count + 1;
+            }
+        }
+        const token = `PEN-${String(nextNum).padStart(3, '0')}`;
+        const exists = await this.prisma.user.findUnique({ where: { qr_token: token } });
+        if (exists) {
+            for (let i = nextNum + 1; i < nextNum + 100; i++) {
+                const t = `PEN-${String(i).padStart(3, '0')}`;
+                const taken = await this.prisma.user.findUnique({ where: { qr_token: t } });
+                if (!taken)
+                    return t;
+            }
+        }
+        return token;
     }
     async createPensioner(dto) {
         const existing = await this.prisma.user.findUnique({
@@ -77,12 +106,7 @@ let UsersService = class UsersService {
         if (existing)
             throw new common_1.ConflictException('Ya existe un usuario con ese DNI');
         const hashed = await bcrypt.hash(dto.dni, 10);
-        let qrToken = this.generateQrToken();
-        let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
-        while (tokenExists) {
-            qrToken = this.generateQrToken();
-            tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
-        }
+        const qrToken = await this.generateQrToken();
         const user = await this.prisma.user.create({
             data: {
                 name: dto.name,
@@ -151,11 +175,21 @@ let UsersService = class UsersService {
             throw new common_1.BadRequestException('Solo se puede recargar saldo a pensionistas');
         }
         const newBalance = new prismaNamespace_1.Decimal(user.balance).plus(new prismaNamespace_1.Decimal(amount));
-        return this.prisma.user.update({
+        const updated = await this.prisma.user.update({
             where: { id },
             data: { balance: newBalance },
             select: pensionerSelect,
         });
+        await this.prisma.balanceMovement.create({
+            data: {
+                userId: id,
+                type: 'RECARGA',
+                amount: amount,
+                balance: newBalance,
+                description: `Recarga de saldo +S/ ${amount.toFixed(2)}`,
+            },
+        });
+        return updated;
     }
     async consumeBalance(id, amount, description) {
         if (!amount || amount <= 0) {
@@ -179,6 +213,15 @@ let UsersService = class UsersService {
             where: { id },
             data: { balance: newBalance },
             select: pensionerSelect,
+        });
+        await this.prisma.balanceMovement.create({
+            data: {
+                userId: id,
+                type: 'CONSUMO',
+                amount: -amount,
+                balance: newBalance,
+                description: description || 'Consumo de pedido',
+            },
         });
         return {
             ...updated,
@@ -214,6 +257,23 @@ let UsersService = class UsersService {
             data: { first_login: false },
             select: pensionerSelect,
         });
+    }
+    async getMovements(id, limit = 50) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, role: true, name: true, balance: true },
+        });
+        if (!user)
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        const movements = await this.prisma.balanceMovement.findMany({
+            where: { userId: id },
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+        });
+        return {
+            user: { id: user.id, name: user.name, balance: user.balance },
+            movements,
+        };
     }
 };
 exports.UsersService = UsersService;

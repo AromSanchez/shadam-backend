@@ -9,4 +9,5 @@ export type * from './models/SaleItem';
 export type * from './models/SalePayment';
 export type * from './models/Consumption';
 export type * from './models/PriceConfig';
+export type * from './models/BalanceMovement';
 export type * from './commonInputTypes';

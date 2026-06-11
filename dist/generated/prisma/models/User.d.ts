@@ -180,6 +180,7 @@ export type UserWhereInput = {
     orders?: Prisma.OrderListRelationFilter;
     sales?: Prisma.SaleListRelationFilter;
     consumptions?: Prisma.ConsumptionListRelationFilter;
+    movements?: Prisma.BalanceMovementListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -197,6 +198,7 @@ export type UserOrderByWithRelationInput = {
     orders?: Prisma.OrderOrderByRelationAggregateInput;
     sales?: Prisma.SaleOrderByRelationAggregateInput;
     consumptions?: Prisma.ConsumptionOrderByRelationAggregateInput;
+    movements?: Prisma.BalanceMovementOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number;
@@ -217,6 +219,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     orders?: Prisma.OrderListRelationFilter;
     sales?: Prisma.SaleListRelationFilter;
     consumptions?: Prisma.ConsumptionListRelationFilter;
+    movements?: Prisma.BalanceMovementListRelationFilter;
 }, "id" | "email" | "qr_token">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -269,6 +272,7 @@ export type UserCreateInput = {
     orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: number;
@@ -286,6 +290,7 @@ export type UserUncheckedCreateInput = {
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -302,6 +307,7 @@ export type UserUpdateInput = {
     orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -319,6 +325,7 @@ export type UserUncheckedUpdateInput = {
     orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: number;
@@ -488,6 +495,18 @@ export type UserUpdateOneRequiredWithoutConsumptionsNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsumptionsInput, Prisma.UserUpdateWithoutConsumptionsInput>, Prisma.UserUncheckedUpdateWithoutConsumptionsInput>;
 };
+export type UserCreateNestedOneWithoutMovementsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutMovementsInput, Prisma.UserUncheckedCreateWithoutMovementsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutMovementsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutMovementsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutMovementsInput, Prisma.UserUncheckedCreateWithoutMovementsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutMovementsInput;
+    upsert?: Prisma.UserUpsertWithoutMovementsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMovementsInput, Prisma.UserUpdateWithoutMovementsInput>, Prisma.UserUncheckedUpdateWithoutMovementsInput>;
+};
 export type UserCreateWithoutOrdersInput = {
     name: string;
     email: string;
@@ -502,6 +521,7 @@ export type UserCreateWithoutOrdersInput = {
     updated_at?: Date | string;
     sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutOrdersInput = {
     id?: number;
@@ -518,6 +538,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     updated_at?: Date | string;
     sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOrdersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -546,6 +567,7 @@ export type UserUpdateWithoutOrdersInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -562,6 +584,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutSalesInput = {
     name: string;
@@ -577,6 +600,7 @@ export type UserCreateWithoutSalesInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSalesInput = {
     id?: number;
@@ -593,6 +617,7 @@ export type UserUncheckedCreateWithoutSalesInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
     consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
+    movements?: Prisma.BalanceMovementUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSalesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -621,6 +646,7 @@ export type UserUpdateWithoutSalesInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSalesInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -637,6 +663,7 @@ export type UserUncheckedUpdateWithoutSalesInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
     consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
+    movements?: Prisma.BalanceMovementUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutConsumptionsInput = {
     name: string;
@@ -652,6 +679,7 @@ export type UserCreateWithoutConsumptionsInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
+    movements?: Prisma.BalanceMovementCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutConsumptionsInput = {
     id?: number;
@@ -668,6 +696,7 @@ export type UserUncheckedCreateWithoutConsumptionsInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
+    movements?: Prisma.BalanceMovementUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutConsumptionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -696,6 +725,7 @@ export type UserUpdateWithoutConsumptionsInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
+    movements?: Prisma.BalanceMovementUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutConsumptionsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -712,16 +742,98 @@ export type UserUncheckedUpdateWithoutConsumptionsInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
+    movements?: Prisma.BalanceMovementUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutMovementsInput = {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    pensioner_type?: $Enums.PensionerType | null;
+    qr_token?: string | null;
+    balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: boolean;
+    is_active?: boolean;
+    created_at?: Date | string;
+    updated_at?: Date | string;
+    orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
+    sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutMovementsInput = {
+    id?: number;
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    pensioner_type?: $Enums.PensionerType | null;
+    qr_token?: string | null;
+    balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: boolean;
+    is_active?: boolean;
+    created_at?: Date | string;
+    updated_at?: Date | string;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
+    sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutMovementsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutMovementsInput, Prisma.UserUncheckedCreateWithoutMovementsInput>;
+};
+export type UserUpsertWithoutMovementsInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutMovementsInput, Prisma.UserUncheckedUpdateWithoutMovementsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutMovementsInput, Prisma.UserUncheckedCreateWithoutMovementsInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutMovementsInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutMovementsInput, Prisma.UserUncheckedUpdateWithoutMovementsInput>;
+};
+export type UserUpdateWithoutMovementsInput = {
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
+    qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
+    sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutMovementsInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
+    qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
+    sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCountOutputType = {
     orders: number;
     sales: number;
     consumptions: number;
+    movements: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     orders?: boolean | UserCountOutputTypeCountOrdersArgs;
     sales?: boolean | UserCountOutputTypeCountSalesArgs;
     consumptions?: boolean | UserCountOutputTypeCountConsumptionsArgs;
+    movements?: boolean | UserCountOutputTypeCountMovementsArgs;
 };
 export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null;
@@ -734,6 +846,9 @@ export type UserCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Exte
 };
 export type UserCountOutputTypeCountConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.ConsumptionWhereInput;
+};
+export type UserCountOutputTypeCountMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.BalanceMovementWhereInput;
 };
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
@@ -751,6 +866,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     orders?: boolean | Prisma.User$ordersArgs<ExtArgs>;
     sales?: boolean | Prisma.User$salesArgs<ExtArgs>;
     consumptions?: boolean | Prisma.User$consumptionsArgs<ExtArgs>;
+    movements?: boolean | Prisma.User$movementsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -800,6 +916,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     orders?: boolean | Prisma.User$ordersArgs<ExtArgs>;
     sales?: boolean | Prisma.User$salesArgs<ExtArgs>;
     consumptions?: boolean | Prisma.User$consumptionsArgs<ExtArgs>;
+    movements?: boolean | Prisma.User$movementsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -810,6 +927,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         orders: Prisma.$OrderPayload<ExtArgs>[];
         sales: Prisma.$SalePayload<ExtArgs>[];
         consumptions: Prisma.$ConsumptionPayload<ExtArgs>[];
+        movements: Prisma.$BalanceMovementPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
@@ -879,6 +997,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     consumptions<T extends Prisma.User$consumptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    movements<T extends Prisma.User$movementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$movementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BalanceMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
@@ -1027,6 +1146,17 @@ export type User$consumptionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
     take?: number;
     skip?: number;
     distinct?: Prisma.ConsumptionScalarFieldEnum | Prisma.ConsumptionScalarFieldEnum[];
+};
+export type User$movementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.BalanceMovementSelect<ExtArgs> | null;
+    omit?: Prisma.BalanceMovementOmit<ExtArgs> | null;
+    include?: Prisma.BalanceMovementInclude<ExtArgs> | null;
+    where?: Prisma.BalanceMovementWhereInput;
+    orderBy?: Prisma.BalanceMovementOrderByWithRelationInput | Prisma.BalanceMovementOrderByWithRelationInput[];
+    cursor?: Prisma.BalanceMovementWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.BalanceMovementScalarFieldEnum | Prisma.BalanceMovementScalarFieldEnum[];
 };
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserSelect<ExtArgs> | null;

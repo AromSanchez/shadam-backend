@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -83,5 +84,26 @@ export class UsersController {
   skipOnboarding(@Req() req: any) {
     const userId = req.user.sub;
     return this.usersService.skipOnboarding(userId);
+  }
+
+  /**
+   * Get balance movements history for a pensionista (admin)
+   */
+  @Get(':id/movements')
+  @Roles('admin')
+  getMovements(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('limit') limit?: string,
+  ) {
+    return this.usersService.getMovements(id, limit ? parseInt(limit) : 50);
+  }
+
+  /**
+   * Get my balance movements (pensionista)
+   */
+  @Get('me/movements')
+  @Roles('pensioner')
+  getMyMovements(@Req() req: any, @Query('limit') limit?: string) {
+    return this.usersService.getMovements(req.user.sub, limit ? parseInt(limit) : 50);
   }
 }

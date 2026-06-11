@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PaymentMethod = exports.OrderStatus = exports.CustomerType = exports.OrderType = exports.Categoria = exports.MealType = exports.PensionerType = void 0;
+exports.MovementType = exports.PaymentMethod = exports.OrderStatus = exports.CustomerType = exports.OrderType = exports.Categoria = exports.MealType = exports.PensionerType = void 0;
 exports.PensionerType = {
     ESTUDIANTE: 'ESTUDIANTE',
     TRABAJADOR: 'TRABAJADOR'
@@ -29,5 +29,10 @@ exports.OrderStatus = {
 exports.PaymentMethod = {
     EFECTIVO: 'EFECTIVO',
     YAPE: 'YAPE'
+};
+exports.MovementType = {
+    RECARGA: 'RECARGA',
+    CONSUMO: 'CONSUMO',
+    AJUSTE: 'AJUSTE'
 };
 //# sourceMappingURL=enums.js.map

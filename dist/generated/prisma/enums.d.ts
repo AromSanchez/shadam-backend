@@ -34,3 +34,9 @@ export declare const PaymentMethod: {
     readonly YAPE: "YAPE";
 };
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
+export declare const MovementType: {
+    readonly RECARGA: "RECARGA";
+    readonly CONSUMO: "CONSUMO";
+    readonly AJUSTE: "AJUSTE";
+};
+export type MovementType = (typeof MovementType)[keyof typeof MovementType];

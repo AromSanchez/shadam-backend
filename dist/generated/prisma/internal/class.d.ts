@@ -63,5 +63,8 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get priceConfig(): Prisma.PriceConfigDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get balanceMovement(): Prisma.BalanceMovementDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;

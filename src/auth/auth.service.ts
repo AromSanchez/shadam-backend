@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -104,10 +103,16 @@ export class AuthService {
         // If pensioner has no qr_token, generate one
         let currentUser = user;
         if (user.role === 'pensioner' && !user.qr_token) {
-            let qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+            // Find next available PEN-XXX number
+            const count = await this.prisma.user.count({
+                where: { qr_token: { startsWith: 'PEN-' } },
+            });
+            let nextNum = count + 1;
+            let qrToken = `PEN-${String(nextNum).padStart(3, '0')}`;
             let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
             while (tokenExists) {
-                qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+                nextNum++;
+                qrToken = `PEN-${String(nextNum).padStart(3, '0')}`;
                 tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
             }
             currentUser = await this.prisma.user.update({

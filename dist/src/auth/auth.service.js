@@ -47,7 +47,6 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
-const crypto = __importStar(require("crypto"));
 let AuthService = class AuthService {
     prisma;
     jwt;
@@ -130,10 +129,15 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Usuario no encontrado');
         let currentUser = user;
         if (user.role === 'pensioner' && !user.qr_token) {
-            let qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+            const count = await this.prisma.user.count({
+                where: { qr_token: { startsWith: 'PEN-' } },
+            });
+            let nextNum = count + 1;
+            let qrToken = `PEN-${String(nextNum).padStart(3, '0')}`;
             let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
             while (tokenExists) {
-                qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+                nextNum++;
+                qrToken = `PEN-${String(nextNum).padStart(3, '0')}`;
                 tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
             }
             currentUser = await this.prisma.user.update({

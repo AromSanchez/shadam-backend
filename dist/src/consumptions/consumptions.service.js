@@ -66,9 +66,19 @@ let ConsumptionsService = class ConsumptionsService {
             if (new prismaNamespace_1.Decimal(user.balance).lessThan(amountCharged)) {
                 throw new common_1.BadRequestException(`Saldo insuficiente. Saldo: S/ ${new prismaNamespace_1.Decimal(user.balance).toFixed(2)}, Costo: S/ ${amountCharged.toFixed(2)}`);
             }
+            const newBalance = new prismaNamespace_1.Decimal(user.balance).minus(amountCharged);
             await this.prisma.user.update({
                 where: { id: userId },
-                data: { balance: new prismaNamespace_1.Decimal(user.balance).minus(amountCharged) },
+                data: { balance: newBalance },
+            });
+            await this.prisma.balanceMovement.create({
+                data: {
+                    userId,
+                    type: 'CONSUMO',
+                    amount: -Number(amountCharged),
+                    balance: newBalance,
+                    description: `Consumo ${mealType.toLowerCase()} -S/ ${amountCharged.toFixed(2)}`,
+                },
             });
         }
         else {
@@ -81,9 +91,19 @@ let ConsumptionsService = class ConsumptionsService {
                 if (new prismaNamespace_1.Decimal(user.balance).lessThan(amountCharged)) {
                     throw new common_1.BadRequestException(`Saldo insuficiente. Con este consumo se completan 3 y se cobra S/ ${STUDENT_CHARGE_PER_3}. Saldo actual: S/ ${new prismaNamespace_1.Decimal(user.balance).toFixed(2)}`);
                 }
+                const newBalance = new prismaNamespace_1.Decimal(user.balance).minus(amountCharged);
                 await this.prisma.user.update({
                     where: { id: userId },
-                    data: { balance: new prismaNamespace_1.Decimal(user.balance).minus(amountCharged) },
+                    data: { balance: newBalance },
+                });
+                await this.prisma.balanceMovement.create({
+                    data: {
+                        userId,
+                        type: 'CONSUMO',
+                        amount: -Number(amountCharged),
+                        balance: newBalance,
+                        description: `Cobro por 3 consumos (estudiante) -S/ ${amountCharged.toFixed(2)}`,
+                    },
                 });
             }
         }
