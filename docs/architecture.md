@@ -25,12 +25,14 @@ shadam-qr-backend/
 │   ├── app.module.ts        # Root module
 │   ├── prisma/              # PrismaService (singleton DB client)
 │   ├── auth/                # JWT auth (login, refresh, logout, guards, decorators)
-│   ├── users/               # User/pensioner CRUD
+│   ├── users/               # User/pensioner CRUD + profile update
 │   ├── productos/           # Product catalog CRUD
 │   ├── menus/               # Daily menu management
 │   ├── orders/              # Temporary orders (pedidos)
 │   ├── payments/            # Payment alias endpoint
-│   └── sales/               # Finalized sales (ventas)
+│   ├── sales/               # Finalized sales (ventas)
+│   ├── consumptions/        # Pensionista consumption tracking
+│   └── config/              # System configuration (meal prices)
 ├── uploads/                 # Static image files (served publicly)
 ├── generated/               # Prisma generated client (auto-generated, do not edit)
 └── package.json
@@ -59,7 +61,7 @@ module-name/
 
 | Model | PK Type | Table Name | Description |
 |-------|---------|------------|-------------|
-| User | Int (autoincrement) | `users` | Admins and pensioners |
+| User | Int (autoincrement) | `users` | Admins and pensioners (with `pensioner_type`) |
 | Producto | Int (autoincrement) | `productos` | Product catalog |
 | Menus | String (cuid) | `menus` | Daily menus (only one active) |
 | MenusProductos | String (cuid) | `menus_productos` | Pivot: menu <-> product (with `visible` toggle) |
@@ -68,12 +70,15 @@ module-name/
 | Sale | String (cuid) | `sales` | Finalized sales (after payment) |
 | SaleItem | String (cuid) | `sale_items` | Items in a sale (snapshot of product name + price) |
 | SalePayment | String (cuid) | `sale_payments` | Payment records per sale |
+| Consumption | String (cuid) | `consumptions` | Pensionista meal consumption records |
+| PriceConfig | String (cuid) | `price_config` | Meal prices for TRABAJADOR pensionistas |
 
 ### Key Relationships
 
 ```
 User 1──N Order (pensionerId?)
 User 1──N Sale (pensionerId?)
+User 1──N Consumption
 
 Producto 1──N MenusProductos ──N Menus        (many-to-many via pivot)
 Producto 1──N OrderItem                        (onDelete: Cascade)
@@ -87,6 +92,8 @@ Sale 1──N SalePayment                          (onDelete: Cascade)
 ### Enums
 
 ```
+PensionerType: ESTUDIANTE | TRABAJADOR
+MealType: DESAYUNO | ALMUERZO | CENA
 Categoria: ENTRADA | MENU
 OrderType: MESA | PARA_LLEVAR
 CustomerType: REGULAR | PENSIONER
@@ -121,12 +128,24 @@ PaymentMethod: EFECTIVO | YAPE
 - `productoId` is nullable (product can be deleted without breaking sales history).
 - Orders are deleted after successful checkout.
 
+### Pensionistas & Consumptions
+- Two types: `ESTUDIANTE` and `TRABAJADOR`.
+- Each pensionista gets a unique `qr_token` (format: `PEN-XXXXXXXXXXXX`) at creation.
+- **TRABAJADOR** pricing: charged immediately per consumption at the configured price (from `PriceConfig` table).
+- **ESTUDIANTE** pricing: charged S/ 16.66 every 3 consumptions (regardless of meal type).
+- A pensionista can only consume each meal type (DESAYUNO/ALMUERZO/CENA) once per day.
+- Balance is deducted from the `User.balance` field.
+- Consumption schedule: DESAYUNO (6:00-10:00), ALMUERZO (11:30-15:00), CENA (17:30-21:00).
+- `qr_token` is used by the receptionist to identify the pensionista (scan or manual entry).
+- First login: password is the DNI, `first_login = true` triggers onboarding flow.
+
 ### Auth
 - JWT stored in HttpOnly cookies (`access_token`: 15min, `refresh_token`: 7d).
 - Guards: `JwtGuard` (authentication) + `RolesGuard` (authorization).
-- Decorator: `@Roles('admin')` restricts endpoints.
+- Decorator: `@Roles('admin')` or `@Roles('pensioner')` restricts endpoints.
 - Products and menus endpoints are currently PUBLIC (no auth guard).
-- Orders, sales, and payments require `admin` role.
+- Orders, sales, payments, consumptions (admin), and config require `admin` role.
+- Pensionista profile/consumption endpoints require `pensioner` role.
 
 ---
 
@@ -134,13 +153,15 @@ PaymentMethod: EFECTIVO | YAPE
 
 | Module | Base Path | Auth Required |
 |--------|-----------|---------------|
-| Auth | `/auth` | No |
-| Users | `/users` | Yes (admin) |
+| Auth | `/auth` | No (login/refresh/logout), Yes (me) |
+| Users | `/users` | Yes (admin for CRUD, pensioner for me/profile) |
 | Products | `/productos` | No |
 | Menus | `/menus` | No |
 | Orders | `/pedidos` | Yes (admin) |
 | Payments | `/pagos` | Yes (admin) |
 | Sales | `/ventas` | Yes (admin) |
+| Consumptions | `/consumptions` | Yes (admin for register/validate, pensioner for me/*) |
+| Config | `/config` | Yes (admin) |
 
 Full API documentation: `docs/api.md`
 

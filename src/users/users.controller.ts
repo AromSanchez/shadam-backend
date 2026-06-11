@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -31,6 +32,12 @@ export class UsersController {
     return this.usersService.findPensioners();
   }
 
+  @Get('pensioners/:id')
+  @Roles('admin')
+  findPensioner(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findPensionerById(id);
+  }
+
   @Patch(':id/toggle')
   @Roles('admin')
   togglePensioner(@Param('id', ParseIntPipe) id: number) {
@@ -53,5 +60,28 @@ export class UsersController {
     @Body() body: { amount: number; description?: string },
   ) {
     return this.usersService.consumeBalance(id, body.amount, body.description);
+  }
+
+  /**
+   * Update own profile (pensionista) - email and/or password
+   */
+  @Patch('me/profile')
+  @Roles('pensioner')
+  updateMyProfile(
+    @Req() req: any,
+    @Body() body: { email?: string; password?: string },
+  ) {
+    const userId = req.user.sub;
+    return this.usersService.updateProfile(userId, body);
+  }
+
+  /**
+   * Skip onboarding (pensionista)
+   */
+  @Patch('me/skip-onboarding')
+  @Roles('pensioner')
+  skipOnboarding(@Req() req: any) {
+    const userId = req.user.sub;
+    return this.usersService.skipOnboarding(userId);
   }
 }

@@ -9,6 +9,8 @@ import { MenusModule } from './menus/menus.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
 import { SalesModule } from './sales/sales.module';
+import { ConsumptionsModule } from './consumptions/consumptions.module';
+import { ConfigModule } from './config/config.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { SalesModule } from './sales/sales.module';
     OrdersModule,
     PaymentsModule,
     SalesModule,
+    ConsumptionsModule,
+    ConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],

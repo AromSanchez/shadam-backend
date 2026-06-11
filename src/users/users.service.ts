@@ -7,13 +7,17 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { Decimal } from '../../generated/prisma/internal/prismaNamespace';
+import { PensionerType } from '../../generated/prisma/client';
 
 const pensionerSelect = {
   id: true,
   name: true,
   email: true,
   role: true,
+  pensioner_type: true,
+  qr_token: true,
   balance: true,
   first_login: true,
   is_active: true,
@@ -25,6 +29,13 @@ const pensionerSelect = {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  /**
+   * Generate a unique QR token for a pensionista
+   */
+  private generateQrToken(): string {
+    return `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+  }
+
   async createPensioner(dto: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.dni },
@@ -34,24 +45,30 @@ export class UsersService {
 
     const hashed = await bcrypt.hash(dto.dni, 10);
 
+    // Generate unique QR token
+    let qrToken = this.generateQrToken();
+    let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+    while (tokenExists) {
+      qrToken = this.generateQrToken();
+      tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+    }
+
     const user = await this.prisma.user.create({
       data: {
         name: dto.name,
         email: dto.dni,
         password: hashed,
         role: 'pensioner',
+        pensioner_type: dto.pensioner_type as PensionerType || PensionerType.ESTUDIANTE,
+        qr_token: qrToken,
         first_login: true,
         is_active: true,
         balance: 0,
       },
+      select: pensionerSelect,
     });
 
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
+    return user;
   }
 
   async findPensioners() {
@@ -60,6 +77,18 @@ export class UsersService {
       select: pensionerSelect,
       orderBy: { created_at: 'desc' },
     });
+  }
+
+  async findPensionerById(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: pensionerSelect,
+    });
+
+    if (!user) throw new NotFoundException('Pensionista no encontrado');
+    if (user.role !== 'pensioner') throw new BadRequestException('El usuario no es pensionista');
+
+    return user;
   }
 
   async togglePensioner(id: number) {
@@ -87,7 +116,6 @@ export class UsersService {
 
   /**
    * Recharge a pensionista's balance (admin only).
-   * Adds the given amount to the current balance.
    */
   async rechargeBalance(id: number, amount: number) {
     if (!amount || amount <= 0) {
@@ -114,8 +142,7 @@ export class UsersService {
   }
 
   /**
-   * Consume balance from a pensionista (used when registering a pensionista order).
-   * Deducts the given amount from the current balance.
+   * Consume balance from a pensionista.
    */
   async consumeBalance(id: number, amount: number, description?: string) {
     if (!amount || amount <= 0) {
@@ -152,5 +179,48 @@ export class UsersService {
       consumed: amount,
       description: description || 'Consumo de pedido',
     };
+  }
+
+  /**
+   * Update pensionista profile (email and/or password) - used for first login setup
+   */
+  async updateProfile(id: number, data: { email?: string; password?: string }) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    const updateData: Record<string, any> = {};
+
+    if (data.email) {
+      // Check email uniqueness
+      const existing = await this.prisma.user.findUnique({ where: { email: data.email } });
+      if (existing && existing.id !== id) {
+        throw new ConflictException('Ya existe un usuario con ese correo');
+      }
+      updateData.email = data.email;
+    }
+
+    if (data.password) {
+      updateData.password = await bcrypt.hash(data.password, 10);
+    }
+
+    // Mark first_login as false after profile update
+    updateData.first_login = false;
+
+    return this.prisma.user.update({
+      where: { id },
+      data: updateData,
+      select: pensionerSelect,
+    });
+  }
+
+  /**
+   * Skip onboarding (mark first_login as false without changing credentials)
+   */
+  async skipOnboarding(id: number) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { first_login: false },
+      select: pensionerSelect,
+    });
   }
 }

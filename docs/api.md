@@ -735,3 +735,283 @@ Lista ventas finalizadas ordenadas por fecha descendente. Incluye pagos y datos 
 ## GET `/ventas/:id`
 
 Obtiene el detalle completo de una venta con items, productos y pagos.
+
+---
+
+# Pensionistas y Consumos
+
+Todos los endpoints de esta seccion requieren cookie `access_token`.
+
+## Enums nuevos
+
+```txt
+PensionerType: ESTUDIANTE | TRABAJADOR
+MealType: DESAYUNO | ALMUERZO | CENA
+```
+
+---
+
+## POST `/users` (Actualizado)
+
+Crea un pensionista. Solo admin. Ahora incluye tipo y genera QR token automaticamente.
+
+**Request Body:**
+
+```json
+{
+  "name": "Juan Pérez",
+  "dni": "12345678",
+  "pensioner_type": "ESTUDIANTE"
+}
+```
+
+> `pensioner_type` acepta: `"ESTUDIANTE"` | `"TRABAJADOR"`. Default: `"ESTUDIANTE"`.
+
+**Response 201:**
+
+```json
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "12345678",
+  "role": "pensioner",
+  "pensioner_type": "ESTUDIANTE",
+  "qr_token": "PEN-A1B2C3D4E5F6",
+  "balance": "0",
+  "first_login": true,
+  "is_active": true,
+  "created_at": "2025-01-01T00:00:00.000Z",
+  "updated_at": "2025-01-01T00:00:00.000Z"
+}
+```
+
+---
+
+## GET `/auth/me` (Actualizado)
+
+Para pensionistas, ahora incluye `pensioner_type`, `qr_token` y consumos del dia.
+
+**Response 200 (pensionista):**
+
+```json
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "12345678",
+  "role": "pensioner",
+  "pensioner_type": "ESTUDIANTE",
+  "qr_token": "PEN-A1B2C3D4E5F6",
+  "balance": "50.00",
+  "first_login": false,
+  "is_active": true,
+  "todayConsumptions": [
+    { "mealType": "DESAYUNO", "amount": "0", "date": "2025-06-11T07:30:00.000Z" }
+  ]
+}
+```
+
+---
+
+## PATCH `/users/me/profile`
+
+Actualiza email y/o password del pensionista. Marca `first_login = false`.
+
+**Auth:** Requiere rol `pensioner`.
+
+**Request Body:**
+
+```json
+{
+  "email": "nuevo@correo.com",
+  "password": "nuevaPassword123"
+}
+```
+
+> Ambos campos son opcionales. Enviar al menos uno.
+
+**Response 200:** Retorna el usuario actualizado.
+
+**Response 409:** Ya existe un usuario con ese correo.
+
+---
+
+## PATCH `/users/me/skip-onboarding`
+
+Omite el onboarding sin cambiar credenciales. Marca `first_login = false`.
+
+**Auth:** Requiere rol `pensioner`.
+
+**Response 200:** Retorna el usuario actualizado.
+
+---
+
+# Consumos
+
+Endpoints para registrar y consultar consumos de pensionistas.
+
+---
+
+## POST `/consumptions`
+
+Registra un consumo para un pensionista. Solo admin (recepcionista).
+
+**Logica de cobro:**
+- **TRABAJADOR:** Se cobra inmediatamente el precio configurado para ese tipo de comida.
+- **ESTUDIANTE:** Se cobra S/ 16.66 cada 3 consumos (sin importar el tipo de comida).
+
+**Request Body:**
+
+```json
+{
+  "userId": 1,
+  "mealType": "ALMUERZO"
+}
+```
+
+**Response 201:**
+
+```json
+{
+  "id": "clxyz...",
+  "userId": 1,
+  "mealType": "ALMUERZO",
+  "amount": "8.00",
+  "date": "2025-06-11T12:30:00.000Z",
+  "createdAt": "2025-06-11T12:30:00.000Z",
+  "user": {
+    "id": 1,
+    "name": "Juan Pérez",
+    "balance": "42.00",
+    "pensioner_type": "TRABAJADOR"
+  },
+  "message": "Consumo registrado. Se descontó S/ 8.00"
+}
+```
+
+**Response 400:**
+- El pensionista ya consumió ese tipo de comida hoy
+- Saldo insuficiente
+- No hay precio configurado para ese tipo de comida
+- El pensionista no está activo
+
+---
+
+## POST `/consumptions/validate-qr`
+
+Valida un pensionista por su token QR. Retorna info del pensionista y consumos del dia.
+
+**Auth:** Requiere rol `admin`.
+
+**Request Body:**
+
+```json
+{
+  "qrToken": "PEN-A1B2C3D4E5F6"
+}
+```
+
+**Response 200:**
+
+```json
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "12345678",
+  "role": "pensioner",
+  "pensioner_type": "ESTUDIANTE",
+  "balance": "50.00",
+  "is_active": true,
+  "qr_token": "PEN-A1B2C3D4E5F6",
+  "todayConsumptions": ["DESAYUNO"]
+}
+```
+
+**Response 404:** Código QR inválido.
+**Response 400:** El código no corresponde a un pensionista / no está activo.
+
+---
+
+## GET `/consumptions/user/:userId`
+
+Historial de consumos de un pensionista (ultimos 100). Solo admin.
+
+---
+
+## GET `/consumptions/user/:userId/today`
+
+Consumos del dia de un pensionista. Solo admin.
+
+---
+
+## GET `/consumptions/user/:userId/stats`
+
+Estadisticas de consumo de un pensionista. Solo admin.
+
+**Response 200:**
+
+```json
+{
+  "totalConsumed": 45,
+  "totalCharged": 250.00,
+  "history": {
+    "2025-06-11": { "meals": ["DESAYUNO", "ALMUERZO"], "totalCharged": 13 },
+    "2025-06-10": { "meals": ["DESAYUNO", "ALMUERZO", "CENA"], "totalCharged": 19 }
+  }
+}
+```
+
+---
+
+## GET `/consumptions/me/history`
+
+Historial propio (pensionista). Requiere rol `pensioner`.
+
+## GET `/consumptions/me/today`
+
+Consumos del dia propio (pensionista). Requiere rol `pensioner`.
+
+## GET `/consumptions/me/stats`
+
+Estadisticas propias (pensionista). Requiere rol `pensioner`.
+
+---
+
+# Configuración de Precios
+
+Precios que se cobran a pensionistas TRABAJADORES por cada consumo.
+
+---
+
+## GET `/config/prices`
+
+Retorna los precios configurados para cada tipo de comida. Solo admin.
+
+**Response 200:**
+
+```json
+{
+  "DESAYUNO": 5.00,
+  "ALMUERZO": 8.00,
+  "CENA": 6.00
+}
+```
+
+---
+
+## PATCH `/config/prices`
+
+Actualiza uno o varios precios. Solo admin.
+
+**Request Body:**
+
+```json
+{
+  "desayuno": 5.50,
+  "almuerzo": 9.00,
+  "cena": 6.50
+}
+```
+
+> Todos los campos son opcionales. Solo se actualizan los enviados.
+
+**Response 200:** Retorna todos los precios actualizados (mismo formato que GET).

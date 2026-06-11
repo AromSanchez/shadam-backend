@@ -90,6 +90,8 @@ export class AuthService {
                 name: true,
                 email: true,
                 role: true,
+                pensioner_type: true,
+                qr_token: true,
                 balance: true,
                 first_login: true,
                 is_active: true,
@@ -97,6 +99,31 @@ export class AuthService {
         });
 
         if (!user) throw new UnauthorizedException('Usuario no encontrado');
+
+        // If pensioner, also return today's consumptions
+        if (user.role === 'pensioner') {
+            const todayStart = new Date();
+            todayStart.setHours(0, 0, 0, 0);
+            const todayEnd = new Date();
+            todayEnd.setHours(23, 59, 59, 999);
+
+            const todayConsumptions = await this.prisma.consumption.findMany({
+                where: {
+                    userId: user.id,
+                    date: { gte: todayStart, lte: todayEnd },
+                },
+                orderBy: { date: 'asc' },
+            });
+
+            return {
+                ...user,
+                todayConsumptions: todayConsumptions.map(c => ({
+                    mealType: c.mealType,
+                    amount: c.amount,
+                    date: c.date,
+                })),
+            };
+        }
 
         return user;
     }
