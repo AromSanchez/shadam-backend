@@ -1,3 +1,14 @@
+export declare const PensionerType: {
+    readonly ESTUDIANTE: "ESTUDIANTE";
+    readonly TRABAJADOR: "TRABAJADOR";
+};
+export type PensionerType = (typeof PensionerType)[keyof typeof PensionerType];
+export declare const MealType: {
+    readonly DESAYUNO: "DESAYUNO";
+    readonly ALMUERZO: "ALMUERZO";
+    readonly CENA: "CENA";
+};
+export type MealType = (typeof MealType)[keyof typeof MealType];
 export declare const Categoria: {
     readonly ENTRADA: "ENTRADA";
     readonly MENU: "MENU";

@@ -9,27 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserDto = void 0;
+exports.RegisterConsumptionDto = void 0;
 const class_validator_1 = require("class-validator");
 const client_1 = require("../../../generated/prisma/client");
-class CreateUserDto {
-    name;
-    dni;
-    pensioner_type;
+class RegisterConsumptionDto {
+    userId;
+    mealType;
 }
-exports.CreateUserDto = CreateUserDto;
+exports.RegisterConsumptionDto = RegisterConsumptionDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "name", void 0);
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], RegisterConsumptionDto.prototype, "userId", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Length)(8, 8, { message: 'El DNI debe tener 8 dígitos' }),
+    (0, class_validator_1.IsEnum)(client_1.MealType),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "dni", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_1.PensionerType),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "pensioner_type", void 0);
-//# sourceMappingURL=create-user.dto.js.map
+], RegisterConsumptionDto.prototype, "mealType", void 0);
+//# sourceMappingURL=register-consumption.dto.js.map

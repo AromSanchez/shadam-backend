@@ -47,6 +47,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
+const crypto = __importStar(require("crypto"));
 let AuthService = class AuthService {
     prisma;
     jwt;
@@ -118,6 +119,8 @@ let AuthService = class AuthService {
                 name: true,
                 email: true,
                 role: true,
+                pensioner_type: true,
+                qr_token: true,
                 balance: true,
                 first_login: true,
                 is_active: true,
@@ -125,7 +128,52 @@ let AuthService = class AuthService {
         });
         if (!user)
             throw new common_1.UnauthorizedException('Usuario no encontrado');
-        return user;
+        let currentUser = user;
+        if (user.role === 'pensioner' && !user.qr_token) {
+            let qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+            let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+            while (tokenExists) {
+                qrToken = `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+                tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+            }
+            currentUser = await this.prisma.user.update({
+                where: { id: user.id },
+                data: { qr_token: qrToken },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                    pensioner_type: true,
+                    qr_token: true,
+                    balance: true,
+                    first_login: true,
+                    is_active: true,
+                },
+            });
+        }
+        if (currentUser.role === 'pensioner') {
+            const todayStart = new Date();
+            todayStart.setHours(0, 0, 0, 0);
+            const todayEnd = new Date();
+            todayEnd.setHours(23, 59, 59, 999);
+            const todayConsumptions = await this.prisma.consumption.findMany({
+                where: {
+                    userId: currentUser.id,
+                    date: { gte: todayStart, lte: todayEnd },
+                },
+                orderBy: { date: 'asc' },
+            });
+            return {
+                ...currentUser,
+                todayConsumptions: todayConsumptions.map(c => ({
+                    mealType: c.mealType,
+                    amount: c.amount,
+                    date: c.date,
+                })),
+            };
+        }
+        return currentUser;
     }
 };
 exports.AuthService = AuthService;

@@ -1,4 +1,5 @@
 import type * as runtime from "@prisma/client/runtime/client";
+import type * as $Enums from "../enums";
 import type * as Prisma from "../internal/prismaNamespace";
 export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayload>;
 export type AggregateUser = {
@@ -22,6 +23,7 @@ export type UserMinAggregateOutputType = {
     email: string | null;
     password: string | null;
     role: string | null;
+    pensioner_type: $Enums.PensionerType | null;
     qr_token: string | null;
     balance: runtime.Decimal | null;
     first_login: boolean | null;
@@ -35,6 +37,7 @@ export type UserMaxAggregateOutputType = {
     email: string | null;
     password: string | null;
     role: string | null;
+    pensioner_type: $Enums.PensionerType | null;
     qr_token: string | null;
     balance: runtime.Decimal | null;
     first_login: boolean | null;
@@ -48,6 +51,7 @@ export type UserCountAggregateOutputType = {
     email: number;
     password: number;
     role: number;
+    pensioner_type: number;
     qr_token: number;
     balance: number;
     first_login: number;
@@ -70,6 +74,7 @@ export type UserMinAggregateInputType = {
     email?: true;
     password?: true;
     role?: true;
+    pensioner_type?: true;
     qr_token?: true;
     balance?: true;
     first_login?: true;
@@ -83,6 +88,7 @@ export type UserMaxAggregateInputType = {
     email?: true;
     password?: true;
     role?: true;
+    pensioner_type?: true;
     qr_token?: true;
     balance?: true;
     first_login?: true;
@@ -96,6 +102,7 @@ export type UserCountAggregateInputType = {
     email?: true;
     password?: true;
     role?: true;
+    pensioner_type?: true;
     qr_token?: true;
     balance?: true;
     first_login?: true;
@@ -138,6 +145,7 @@ export type UserGroupByOutputType = {
     email: string;
     password: string;
     role: string;
+    pensioner_type: $Enums.PensionerType | null;
     qr_token: string | null;
     balance: runtime.Decimal;
     first_login: boolean;
@@ -162,6 +170,7 @@ export type UserWhereInput = {
     email?: Prisma.StringFilter<"User"> | string;
     password?: Prisma.StringFilter<"User"> | string;
     role?: Prisma.StringFilter<"User"> | string;
+    pensioner_type?: Prisma.EnumPensionerTypeNullableFilter<"User"> | $Enums.PensionerType | null;
     qr_token?: Prisma.StringNullableFilter<"User"> | string | null;
     balance?: Prisma.DecimalFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFilter<"User"> | boolean;
@@ -170,6 +179,7 @@ export type UserWhereInput = {
     updated_at?: Prisma.DateTimeFilter<"User"> | Date | string;
     orders?: Prisma.OrderListRelationFilter;
     sales?: Prisma.SaleListRelationFilter;
+    consumptions?: Prisma.ConsumptionListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -177,6 +187,7 @@ export type UserOrderByWithRelationInput = {
     email?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
+    pensioner_type?: Prisma.SortOrderInput | Prisma.SortOrder;
     qr_token?: Prisma.SortOrderInput | Prisma.SortOrder;
     balance?: Prisma.SortOrder;
     first_login?: Prisma.SortOrder;
@@ -185,6 +196,7 @@ export type UserOrderByWithRelationInput = {
     updated_at?: Prisma.SortOrder;
     orders?: Prisma.OrderOrderByRelationAggregateInput;
     sales?: Prisma.SaleOrderByRelationAggregateInput;
+    consumptions?: Prisma.ConsumptionOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number;
@@ -196,6 +208,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     name?: Prisma.StringFilter<"User"> | string;
     password?: Prisma.StringFilter<"User"> | string;
     role?: Prisma.StringFilter<"User"> | string;
+    pensioner_type?: Prisma.EnumPensionerTypeNullableFilter<"User"> | $Enums.PensionerType | null;
     balance?: Prisma.DecimalFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFilter<"User"> | boolean;
     is_active?: Prisma.BoolFilter<"User"> | boolean;
@@ -203,6 +216,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     updated_at?: Prisma.DateTimeFilter<"User"> | Date | string;
     orders?: Prisma.OrderListRelationFilter;
     sales?: Prisma.SaleListRelationFilter;
+    consumptions?: Prisma.ConsumptionListRelationFilter;
 }, "id" | "email" | "qr_token">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -210,6 +224,7 @@ export type UserOrderByWithAggregationInput = {
     email?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
+    pensioner_type?: Prisma.SortOrderInput | Prisma.SortOrder;
     qr_token?: Prisma.SortOrderInput | Prisma.SortOrder;
     balance?: Prisma.SortOrder;
     first_login?: Prisma.SortOrder;
@@ -231,6 +246,7 @@ export type UserScalarWhereWithAggregatesInput = {
     email?: Prisma.StringWithAggregatesFilter<"User"> | string;
     password?: Prisma.StringWithAggregatesFilter<"User"> | string;
     role?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    pensioner_type?: Prisma.EnumPensionerTypeNullableWithAggregatesFilter<"User"> | $Enums.PensionerType | null;
     qr_token?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     balance?: Prisma.DecimalWithAggregatesFilter<"User"> | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
@@ -243,6 +259,7 @@ export type UserCreateInput = {
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -251,6 +268,7 @@ export type UserCreateInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: number;
@@ -258,6 +276,7 @@ export type UserUncheckedCreateInput = {
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -266,12 +285,14 @@ export type UserUncheckedCreateInput = {
     updated_at?: Date | string;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
     sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -280,6 +301,7 @@ export type UserUpdateInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -287,6 +309,7 @@ export type UserUncheckedUpdateInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -295,6 +318,7 @@ export type UserUncheckedUpdateInput = {
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
     sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: number;
@@ -302,6 +326,7 @@ export type UserCreateManyInput = {
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -314,6 +339,7 @@ export type UserUpdateManyMutationInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -327,6 +353,7 @@ export type UserUncheckedUpdateManyInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -340,6 +367,7 @@ export type UserCountOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
+    pensioner_type?: Prisma.SortOrder;
     qr_token?: Prisma.SortOrder;
     balance?: Prisma.SortOrder;
     first_login?: Prisma.SortOrder;
@@ -357,6 +385,7 @@ export type UserMaxOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
+    pensioner_type?: Prisma.SortOrder;
     qr_token?: Prisma.SortOrder;
     balance?: Prisma.SortOrder;
     first_login?: Prisma.SortOrder;
@@ -370,6 +399,7 @@ export type UserMinOrderByAggregateInput = {
     email?: Prisma.SortOrder;
     password?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
+    pensioner_type?: Prisma.SortOrder;
     qr_token?: Prisma.SortOrder;
     balance?: Prisma.SortOrder;
     first_login?: Prisma.SortOrder;
@@ -385,8 +415,15 @@ export type UserNullableScalarRelationFilter = {
     is?: Prisma.UserWhereInput | null;
     isNot?: Prisma.UserWhereInput | null;
 };
+export type UserScalarRelationFilter = {
+    is?: Prisma.UserWhereInput;
+    isNot?: Prisma.UserWhereInput;
+};
 export type StringFieldUpdateOperationsInput = {
     set?: string;
+};
+export type NullableEnumPensionerTypeFieldUpdateOperationsInput = {
+    set?: $Enums.PensionerType | null;
 };
 export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null;
@@ -439,11 +476,24 @@ export type UserUpdateOneWithoutSalesNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSalesInput, Prisma.UserUpdateWithoutSalesInput>, Prisma.UserUncheckedUpdateWithoutSalesInput>;
 };
+export type UserCreateNestedOneWithoutConsumptionsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutConsumptionsInput, Prisma.UserUncheckedCreateWithoutConsumptionsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsumptionsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutConsumptionsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutConsumptionsInput, Prisma.UserUncheckedCreateWithoutConsumptionsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsumptionsInput;
+    upsert?: Prisma.UserUpsertWithoutConsumptionsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsumptionsInput, Prisma.UserUpdateWithoutConsumptionsInput>, Prisma.UserUncheckedUpdateWithoutConsumptionsInput>;
+};
 export type UserCreateWithoutOrdersInput = {
     name: string;
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -451,6 +501,7 @@ export type UserCreateWithoutOrdersInput = {
     created_at?: Date | string;
     updated_at?: Date | string;
     sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutOrdersInput = {
     id?: number;
@@ -458,6 +509,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -465,6 +517,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
     created_at?: Date | string;
     updated_at?: Date | string;
     sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutOrdersInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -484,6 +537,7 @@ export type UserUpdateWithoutOrdersInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -491,6 +545,7 @@ export type UserUpdateWithoutOrdersInput = {
     created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -498,6 +553,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -505,12 +561,14 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
     created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutSalesInput = {
     name: string;
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -518,6 +576,7 @@ export type UserCreateWithoutSalesInput = {
     created_at?: Date | string;
     updated_at?: Date | string;
     orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSalesInput = {
     id?: number;
@@ -525,6 +584,7 @@ export type UserUncheckedCreateWithoutSalesInput = {
     email: string;
     password: string;
     role: string;
+    pensioner_type?: $Enums.PensionerType | null;
     qr_token?: string | null;
     balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: boolean;
@@ -532,6 +592,7 @@ export type UserUncheckedCreateWithoutSalesInput = {
     created_at?: Date | string;
     updated_at?: Date | string;
     orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
+    consumptions?: Prisma.ConsumptionUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSalesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -551,6 +612,7 @@ export type UserUpdateWithoutSalesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -558,6 +620,7 @@ export type UserUpdateWithoutSalesInput = {
     created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSalesInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -565,6 +628,7 @@ export type UserUncheckedUpdateWithoutSalesInput = {
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
     qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
     first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -572,14 +636,92 @@ export type UserUncheckedUpdateWithoutSalesInput = {
     created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
+    consumptions?: Prisma.ConsumptionUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutConsumptionsInput = {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    pensioner_type?: $Enums.PensionerType | null;
+    qr_token?: string | null;
+    balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: boolean;
+    is_active?: boolean;
+    created_at?: Date | string;
+    updated_at?: Date | string;
+    orders?: Prisma.OrderCreateNestedManyWithoutPensionerInput;
+    sales?: Prisma.SaleCreateNestedManyWithoutPensionerInput;
+};
+export type UserUncheckedCreateWithoutConsumptionsInput = {
+    id?: number;
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    pensioner_type?: $Enums.PensionerType | null;
+    qr_token?: string | null;
+    balance?: runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: boolean;
+    is_active?: boolean;
+    created_at?: Date | string;
+    updated_at?: Date | string;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPensionerInput;
+    sales?: Prisma.SaleUncheckedCreateNestedManyWithoutPensionerInput;
+};
+export type UserCreateOrConnectWithoutConsumptionsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutConsumptionsInput, Prisma.UserUncheckedCreateWithoutConsumptionsInput>;
+};
+export type UserUpsertWithoutConsumptionsInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutConsumptionsInput, Prisma.UserUncheckedUpdateWithoutConsumptionsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutConsumptionsInput, Prisma.UserUncheckedCreateWithoutConsumptionsInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutConsumptionsInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutConsumptionsInput, Prisma.UserUncheckedUpdateWithoutConsumptionsInput>;
+};
+export type UserUpdateWithoutConsumptionsInput = {
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
+    qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    orders?: Prisma.OrderUpdateManyWithoutPensionerNestedInput;
+    sales?: Prisma.SaleUpdateManyWithoutPensionerNestedInput;
+};
+export type UserUncheckedUpdateWithoutConsumptionsInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    pensioner_type?: Prisma.NullableEnumPensionerTypeFieldUpdateOperationsInput | $Enums.PensionerType | null;
+    qr_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string;
+    first_login?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutPensionerNestedInput;
+    sales?: Prisma.SaleUncheckedUpdateManyWithoutPensionerNestedInput;
 };
 export type UserCountOutputType = {
     orders: number;
     sales: number;
+    consumptions: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     orders?: boolean | UserCountOutputTypeCountOrdersArgs;
     sales?: boolean | UserCountOutputTypeCountSalesArgs;
+    consumptions?: boolean | UserCountOutputTypeCountConsumptionsArgs;
 };
 export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null;
@@ -590,12 +732,16 @@ export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Ext
 export type UserCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.SaleWhereInput;
 };
+export type UserCountOutputTypeCountConsumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ConsumptionWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     name?: boolean;
     email?: boolean;
     password?: boolean;
     role?: boolean;
+    pensioner_type?: boolean;
     qr_token?: boolean;
     balance?: boolean;
     first_login?: boolean;
@@ -604,6 +750,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     updated_at?: boolean;
     orders?: boolean | Prisma.User$ordersArgs<ExtArgs>;
     sales?: boolean | Prisma.User$salesArgs<ExtArgs>;
+    consumptions?: boolean | Prisma.User$consumptionsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -612,6 +759,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     email?: boolean;
     password?: boolean;
     role?: boolean;
+    pensioner_type?: boolean;
     qr_token?: boolean;
     balance?: boolean;
     first_login?: boolean;
@@ -625,6 +773,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     email?: boolean;
     password?: boolean;
     role?: boolean;
+    pensioner_type?: boolean;
     qr_token?: boolean;
     balance?: boolean;
     first_login?: boolean;
@@ -638,6 +787,7 @@ export type UserSelectScalar = {
     email?: boolean;
     password?: boolean;
     role?: boolean;
+    pensioner_type?: boolean;
     qr_token?: boolean;
     balance?: boolean;
     first_login?: boolean;
@@ -645,10 +795,11 @@ export type UserSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "qr_token" | "balance" | "first_login" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "pensioner_type" | "qr_token" | "balance" | "first_login" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     orders?: boolean | Prisma.User$ordersArgs<ExtArgs>;
     sales?: boolean | Prisma.User$salesArgs<ExtArgs>;
+    consumptions?: boolean | Prisma.User$consumptionsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -658,6 +809,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     objects: {
         orders: Prisma.$OrderPayload<ExtArgs>[];
         sales: Prisma.$SalePayload<ExtArgs>[];
+        consumptions: Prisma.$ConsumptionPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
@@ -665,6 +817,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         email: string;
         password: string;
         role: string;
+        pensioner_type: $Enums.PensionerType | null;
         qr_token: string | null;
         balance: runtime.Decimal;
         first_login: boolean;
@@ -725,6 +878,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     readonly [Symbol.toStringTag]: "PrismaPromise";
     orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     sales<T extends Prisma.User$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    consumptions<T extends Prisma.User$consumptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
@@ -735,6 +889,7 @@ export interface UserFieldRefs {
     readonly email: Prisma.FieldRef<"User", 'String'>;
     readonly password: Prisma.FieldRef<"User", 'String'>;
     readonly role: Prisma.FieldRef<"User", 'String'>;
+    readonly pensioner_type: Prisma.FieldRef<"User", 'PensionerType'>;
     readonly qr_token: Prisma.FieldRef<"User", 'String'>;
     readonly balance: Prisma.FieldRef<"User", 'Decimal'>;
     readonly first_login: Prisma.FieldRef<"User", 'Boolean'>;
@@ -861,6 +1016,17 @@ export type User$salesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
     take?: number;
     skip?: number;
     distinct?: Prisma.SaleScalarFieldEnum | Prisma.SaleScalarFieldEnum[];
+};
+export type User$consumptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.ConsumptionSelect<ExtArgs> | null;
+    omit?: Prisma.ConsumptionOmit<ExtArgs> | null;
+    include?: Prisma.ConsumptionInclude<ExtArgs> | null;
+    where?: Prisma.ConsumptionWhereInput;
+    orderBy?: Prisma.ConsumptionOrderByWithRelationInput | Prisma.ConsumptionOrderByWithRelationInput[];
+    cursor?: Prisma.ConsumptionWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ConsumptionScalarFieldEnum | Prisma.ConsumptionScalarFieldEnum[];
 };
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserSelect<ExtArgs> | null;

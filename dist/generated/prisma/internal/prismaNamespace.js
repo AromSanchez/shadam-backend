@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.SalePaymentScalarFieldEnum = exports.SaleItemScalarFieldEnum = exports.SaleScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.MenusProductosScalarFieldEnum = exports.MenusScalarFieldEnum = exports.ProductoScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.PriceConfigScalarFieldEnum = exports.ConsumptionScalarFieldEnum = exports.SalePaymentScalarFieldEnum = exports.SaleItemScalarFieldEnum = exports.SaleScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.MenusProductosScalarFieldEnum = exports.MenusScalarFieldEnum = exports.ProductoScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 exports.PrismaClientKnownRequestError = runtime.PrismaClientKnownRequestError;
 exports.PrismaClientUnknownRequestError = runtime.PrismaClientUnknownRequestError;
@@ -68,7 +68,9 @@ exports.ModelName = {
     OrderItem: 'OrderItem',
     Sale: 'Sale',
     SaleItem: 'SaleItem',
-    SalePayment: 'SalePayment'
+    SalePayment: 'SalePayment',
+    Consumption: 'Consumption',
+    PriceConfig: 'PriceConfig'
 };
 exports.TransactionIsolationLevel = runtime.makeStrictEnum({
     ReadUncommitted: 'ReadUncommitted',
@@ -82,6 +84,7 @@ exports.UserScalarFieldEnum = {
     email: 'email',
     password: 'password',
     role: 'role',
+    pensioner_type: 'pensioner_type',
     qr_token: 'qr_token',
     balance: 'balance',
     first_login: 'first_login',
@@ -166,6 +169,20 @@ exports.SalePaymentScalarFieldEnum = {
     method: 'method',
     amount: 'amount',
     createdAt: 'createdAt'
+};
+exports.ConsumptionScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    mealType: 'mealType',
+    amount: 'amount',
+    date: 'date',
+    createdAt: 'createdAt'
+};
+exports.PriceConfigScalarFieldEnum = {
+    id: 'id',
+    mealType: 'mealType',
+    price: 'price',
+    updatedAt: 'updatedAt'
 };
 exports.SortOrder = {
     asc: 'asc',

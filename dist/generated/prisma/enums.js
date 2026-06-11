@@ -1,6 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PaymentMethod = exports.OrderStatus = exports.CustomerType = exports.OrderType = exports.Categoria = void 0;
+exports.PaymentMethod = exports.OrderStatus = exports.CustomerType = exports.OrderType = exports.Categoria = exports.MealType = exports.PensionerType = void 0;
+exports.PensionerType = {
+    ESTUDIANTE: 'ESTUDIANTE',
+    TRABAJADOR: 'TRABAJADOR'
+};
+exports.MealType = {
+    DESAYUNO: 'DESAYUNO',
+    ALMUERZO: 'ALMUERZO',
+    CENA: 'CENA'
+};
 exports.Categoria = {
     ENTRADA: 'ENTRADA',
     MENU: 'MENU'

@@ -7,4 +7,6 @@ export type * from './models/OrderItem';
 export type * from './models/Sale';
 export type * from './models/SaleItem';
 export type * from './models/SalePayment';
+export type * from './models/Consumption';
+export type * from './models/PriceConfig';
 export type * from './commonInputTypes';

@@ -15,3 +15,5 @@ export type OrderItem = Prisma.OrderItemModel;
 export type Sale = Prisma.SaleModel;
 export type SaleItem = Prisma.SaleItemModel;
 export type SalePayment = Prisma.SalePaymentModel;
+export type Consumption = Prisma.ConsumptionModel;
+export type PriceConfig = Prisma.PriceConfigModel;

@@ -166,6 +166,8 @@ export declare const ModelName: {
     readonly Sale: "Sale";
     readonly SaleItem: "SaleItem";
     readonly SalePayment: "SalePayment";
+    readonly Consumption: "Consumption";
+    readonly PriceConfig: "PriceConfig";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -178,7 +180,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "user" | "producto" | "menus" | "menusProductos" | "order" | "orderItem" | "sale" | "saleItem" | "salePayment";
+        modelProps: "user" | "producto" | "menus" | "menusProductos" | "order" | "orderItem" | "sale" | "saleItem" | "salePayment" | "consumption" | "priceConfig";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -848,6 +850,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        Consumption: {
+            payload: Prisma.$ConsumptionPayload<ExtArgs>;
+            fields: Prisma.ConsumptionFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ConsumptionFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ConsumptionFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ConsumptionFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ConsumptionFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                findMany: {
+                    args: Prisma.ConsumptionFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>[];
+                };
+                create: {
+                    args: Prisma.ConsumptionCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                createMany: {
+                    args: Prisma.ConsumptionCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ConsumptionCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>[];
+                };
+                delete: {
+                    args: Prisma.ConsumptionDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                update: {
+                    args: Prisma.ConsumptionUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ConsumptionDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ConsumptionUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ConsumptionUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ConsumptionUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsumptionPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ConsumptionAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateConsumption>;
+                };
+                groupBy: {
+                    args: Prisma.ConsumptionGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ConsumptionGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ConsumptionCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ConsumptionCountAggregateOutputType> | number;
+                };
+            };
+        };
+        PriceConfig: {
+            payload: Prisma.$PriceConfigPayload<ExtArgs>;
+            fields: Prisma.PriceConfigFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.PriceConfigFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.PriceConfigFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                findFirst: {
+                    args: Prisma.PriceConfigFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.PriceConfigFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                findMany: {
+                    args: Prisma.PriceConfigFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>[];
+                };
+                create: {
+                    args: Prisma.PriceConfigCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                createMany: {
+                    args: Prisma.PriceConfigCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.PriceConfigCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>[];
+                };
+                delete: {
+                    args: Prisma.PriceConfigDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                update: {
+                    args: Prisma.PriceConfigUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.PriceConfigDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.PriceConfigUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.PriceConfigUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>[];
+                };
+                upsert: {
+                    args: Prisma.PriceConfigUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$PriceConfigPayload>;
+                };
+                aggregate: {
+                    args: Prisma.PriceConfigAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregatePriceConfig>;
+                };
+                groupBy: {
+                    args: Prisma.PriceConfigGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.PriceConfigGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.PriceConfigCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.PriceConfigCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -885,6 +1035,7 @@ export declare const UserScalarFieldEnum: {
     readonly email: "email";
     readonly password: "password";
     readonly role: "role";
+    readonly pensioner_type: "pensioner_type";
     readonly qr_token: "qr_token";
     readonly balance: "balance";
     readonly first_login: "first_login";
@@ -979,6 +1130,22 @@ export declare const SalePaymentScalarFieldEnum: {
     readonly createdAt: "createdAt";
 };
 export type SalePaymentScalarFieldEnum = (typeof SalePaymentScalarFieldEnum)[keyof typeof SalePaymentScalarFieldEnum];
+export declare const ConsumptionScalarFieldEnum: {
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly mealType: "mealType";
+    readonly amount: "amount";
+    readonly date: "date";
+    readonly createdAt: "createdAt";
+};
+export type ConsumptionScalarFieldEnum = (typeof ConsumptionScalarFieldEnum)[keyof typeof ConsumptionScalarFieldEnum];
+export declare const PriceConfigScalarFieldEnum: {
+    readonly id: "id";
+    readonly mealType: "mealType";
+    readonly price: "price";
+    readonly updatedAt: "updatedAt";
+};
+export type PriceConfigScalarFieldEnum = (typeof PriceConfigScalarFieldEnum)[keyof typeof PriceConfigScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -998,6 +1165,8 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>;
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
+export type EnumPensionerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PensionerType'>;
+export type ListEnumPensionerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PensionerType[]'>;
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>;
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>;
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>;
@@ -1013,6 +1182,8 @@ export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>;
 export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>;
 export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>;
+export type EnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType'>;
+export type ListEnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType[]'>;
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>;
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>;
 export type BatchPayload = {
@@ -1049,6 +1220,8 @@ export type GlobalOmitConfig = {
     sale?: Prisma.SaleOmit;
     saleItem?: Prisma.SaleItemOmit;
     salePayment?: Prisma.SalePaymentOmit;
+    consumption?: Prisma.ConsumptionOmit;
+    priceConfig?: Prisma.PriceConfigOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

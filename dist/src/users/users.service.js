@@ -46,12 +46,16 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
+const crypto = __importStar(require("crypto"));
 const prismaNamespace_1 = require("../../generated/prisma/internal/prismaNamespace");
+const client_1 = require("../../generated/prisma/client");
 const pensionerSelect = {
     id: true,
     name: true,
     email: true,
     role: true,
+    pensioner_type: true,
+    qr_token: true,
     balance: true,
     first_login: true,
     is_active: true,
@@ -63,6 +67,9 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    generateQrToken() {
+        return `PEN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+    }
     async createPensioner(dto) {
         const existing = await this.prisma.user.findUnique({
             where: { email: dto.dni },
@@ -70,23 +77,27 @@ let UsersService = class UsersService {
         if (existing)
             throw new common_1.ConflictException('Ya existe un usuario con ese DNI');
         const hashed = await bcrypt.hash(dto.dni, 10);
+        let qrToken = this.generateQrToken();
+        let tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+        while (tokenExists) {
+            qrToken = this.generateQrToken();
+            tokenExists = await this.prisma.user.findUnique({ where: { qr_token: qrToken } });
+        }
         const user = await this.prisma.user.create({
             data: {
                 name: dto.name,
                 email: dto.dni,
                 password: hashed,
                 role: 'pensioner',
+                pensioner_type: dto.pensioner_type || client_1.PensionerType.ESTUDIANTE,
+                qr_token: qrToken,
                 first_login: true,
                 is_active: true,
                 balance: 0,
             },
+            select: pensionerSelect,
         });
-        return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-        };
+        return user;
     }
     async findPensioners() {
         return this.prisma.user.findMany({
@@ -94,6 +105,17 @@ let UsersService = class UsersService {
             select: pensionerSelect,
             orderBy: { created_at: 'desc' },
         });
+    }
+    async findPensionerById(id) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: pensionerSelect,
+        });
+        if (!user)
+            throw new common_1.NotFoundException('Pensionista no encontrado');
+        if (user.role !== 'pensioner')
+            throw new common_1.BadRequestException('El usuario no es pensionista');
+        return user;
     }
     async togglePensioner(id) {
         const user = await this.prisma.user.findUnique({
@@ -163,6 +185,35 @@ let UsersService = class UsersService {
             consumed: amount,
             description: description || 'Consumo de pedido',
         };
+    }
+    async updateProfile(id, data) {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user)
+            throw new common_1.NotFoundException('Usuario no encontrado');
+        const updateData = {};
+        if (data.email) {
+            const existing = await this.prisma.user.findUnique({ where: { email: data.email } });
+            if (existing && existing.id !== id) {
+                throw new common_1.ConflictException('Ya existe un usuario con ese correo');
+            }
+            updateData.email = data.email;
+        }
+        if (data.password) {
+            updateData.password = await bcrypt.hash(data.password, 10);
+        }
+        updateData.first_login = false;
+        return this.prisma.user.update({
+            where: { id },
+            data: updateData,
+            select: pensionerSelect,
+        });
+    }
+    async skipOnboarding(id) {
+        return this.prisma.user.update({
+            where: { id },
+            data: { first_login: false },
+            select: pensionerSelect,
+        });
     }
 };
 exports.UsersService = UsersService;

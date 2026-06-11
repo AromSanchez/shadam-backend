@@ -30,6 +30,9 @@ let UsersController = class UsersController {
     findPensioners() {
         return this.usersService.findPensioners();
     }
+    findPensioner(id) {
+        return this.usersService.findPensionerById(id);
+    }
     togglePensioner(id) {
         return this.usersService.togglePensioner(id);
     }
@@ -38,6 +41,14 @@ let UsersController = class UsersController {
     }
     consumeBalance(id, body) {
         return this.usersService.consumeBalance(id, body.amount, body.description);
+    }
+    updateMyProfile(req, body) {
+        const userId = req.user.sub;
+        return this.usersService.updateProfile(userId, body);
+    }
+    skipOnboarding(req) {
+        const userId = req.user.sub;
+        return this.usersService.skipOnboarding(userId);
     }
 };
 exports.UsersController = UsersController;
@@ -56,6 +67,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findPensioners", null);
+__decorate([
+    (0, common_1.Get)('pensioners/:id'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "findPensioner", null);
 __decorate([
     (0, common_1.Patch)(':id/toggle'),
     (0, roles_decorator_1.Roles)('admin'),
@@ -82,6 +101,23 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "consumeBalance", null);
+__decorate([
+    (0, common_1.Patch)('me/profile'),
+    (0, roles_decorator_1.Roles)('pensioner'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "updateMyProfile", null);
+__decorate([
+    (0, common_1.Patch)('me/skip-onboarding'),
+    (0, roles_decorator_1.Roles)('pensioner'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "skipOnboarding", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
