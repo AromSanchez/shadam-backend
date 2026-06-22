@@ -540,6 +540,23 @@ export class ReportsService {
       totalPaymentsAmount += amt;
     }
 
+    // Since pensioner consumptions deduct balance directly (creating a Consumption record and a BalanceMovement with type 'CONSUMO'), 
+    // and they might not be stored as a SalePayment model, we query the total amount charged to pensioners via balance movements (which are negative amounts).
+    const directConsumptions = await this.prisma.balanceMovement.aggregate({
+      where: {
+        type: 'CONSUMO',
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    // BalanceMovement.amount is registered as a negative number for consumption (-amount).
+    // Let's add the absolute sum to the SALDO payment method to reflect actual pensioner consumption stats.
+    const pensionerConsumptionsAmt = Math.abs(Number(directConsumptions._sum.amount || 0));
+    paymentMethodsMap.SALDO += pensionerConsumptionsAmt;
+    totalPaymentsAmount += pensionerConsumptionsAmt;
+
     // Include Consumption amounts (Saldo) that are registered directly in consumptions (if they aren't part of SalePayments)
     // Note: If a pensioner eats a meal, the system creates a Consumption. Let's see if consumptions are also logged in sales.
     // In our system, checking out a pensioner order creates a Sale with payment method = SALDO?
