@@ -120,6 +120,7 @@ enum OrderStatus {
 enum PaymentMethod {
   EFECTIVO
   YAPE
+  SALDO
 }
 
 model Order {

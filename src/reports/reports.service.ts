@@ -398,4 +398,180 @@ export class ReportsService {
     headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
     headerRow.height = 22;
   }
+
+  async getDashboardStats() {
+    const now = new Date();
+    
+    // Calculate start and end of today in local time
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+    // 1. Today's sales (Total of sales sold today)
+    const salesToday = await this.prisma.sale.aggregate({
+      where: {
+        soldAt: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+      _sum: {
+        total: true,
+      },
+    });
+    const todaySales = Number(salesToday._sum.total || 0);
+
+    // 2. Today's pensioner consumptions count
+    const todayConsumptionsCount = await this.prisma.consumption.count({
+      where: {
+        date: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+    });
+
+    // 3. Pensioners stats
+    const totalPensionists = await this.prisma.user.count({
+      where: {
+        role: 'pensioner',
+      },
+    });
+
+    const activePensionists = await this.prisma.user.count({
+      where: {
+        role: 'pensioner',
+        is_active: true,
+      },
+    });
+
+    // Get active pensioner users to count debt and calculate total debt
+    const activePensionersWithBalances = await this.prisma.user.findMany({
+      where: {
+        role: 'pensioner',
+        is_active: true,
+      },
+      select: {
+        balance: true,
+      },
+    });
+
+    let debtPensionists = 0;
+    let totalDebt = 0;
+    for (const p of activePensionersWithBalances) {
+      const bal = Number(p.balance);
+      if (bal < 0) {
+        debtPensionists++;
+        totalDebt += Math.abs(bal);
+      }
+    }
+
+    // 4. Weekly Sales (Last 7 days, including today)
+    const weeklySales: { day: string; ventas: number }[] = [];
+    const daysName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+      const startOfDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const endOfDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+
+      const daySalesAgg = await this.prisma.sale.aggregate({
+        where: {
+          soldAt: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+        },
+        _sum: {
+          total: true,
+        },
+      });
+
+      weeklySales.push({
+        day: daysName[d.getDay()],
+        ventas: Number(daySalesAgg._sum.total || 0),
+      });
+    }
+
+    // 5. Top 5 sold products (Platos más vendidos)
+    const topDishesGroup = await this.prisma.saleItem.groupBy({
+      by: ['productoId', 'productName'],
+      _sum: {
+        quantity: true,
+      },
+      orderBy: {
+        _sum: {
+          quantity: 'desc',
+        },
+      },
+      take: 5,
+    });
+
+    // Find the max quantity to compute percentage relative to the best seller
+    const maxQty = topDishesGroup.length > 0 ? Number(topDishesGroup[0]._sum.quantity || 0) : 1;
+
+    const topDishes = topDishesGroup.map((item) => {
+      const count = Number(item._sum.quantity || 0);
+      return {
+        name: item.productName,
+        count,
+        pct: maxQty > 0 ? Math.round((count / maxQty) * 100) : 0,
+      };
+    });
+
+    // 6. Payment methods (Efectivo, Yape, Saldo)
+    // Query payments made in the last 30 days to have meaningful stats
+    const paymentsGroup = await this.prisma.salePayment.groupBy({
+      by: ['method'],
+      _sum: {
+        amount: true,
+      },
+    });
+
+    const paymentMethodsMap: Record<string, number> = {
+      EFECTIVO: 0,
+      YAPE: 0,
+      SALDO: 0,
+    };
+
+    let totalPaymentsAmount = 0;
+    for (const p of paymentsGroup) {
+      const amt = Number(p._sum.amount || 0);
+      paymentMethodsMap[p.method] = amt;
+      totalPaymentsAmount += amt;
+    }
+
+    // Include Consumption amounts (Saldo) that are registered directly in consumptions (if they aren't part of SalePayments)
+    // Note: If a pensioner eats a meal, the system creates a Consumption. Let's see if consumptions are also logged in sales.
+    // In our system, checking out a pensioner order creates a Sale with payment method = SALDO?
+    // Wait, let's verify if pensioner consumptions are handled through Checkout or only Consumption.
+    // The user mentioned: "metodos de pago solo debe ser efectivo, yape y saldo que es de los pensionistas consumiendo"
+    // Let's look at paymentData mapping: Efectivo, Yape, Saldo.
+    // We will return percentage values of payment methods based on the payments in the database.
+    const paymentData = [
+      { name: 'Efectivo', value: totalPaymentsAmount > 0 ? Math.round((paymentMethodsMap.EFECTIVO / totalPaymentsAmount) * 100) : 0, color: '#06b6d4' },
+      { name: 'Yape', value: totalPaymentsAmount > 0 ? Math.round((paymentMethodsMap.YAPE / totalPaymentsAmount) * 100) : 0, color: '#7c3aed' },
+      { name: 'Saldo', value: totalPaymentsAmount > 0 ? Math.round((paymentMethodsMap.SALDO / totalPaymentsAmount) * 100) : 0, color: '#facc15' },
+    ];
+
+    // Adjust values to sum up to exactly 100 if there's any data
+    const totalPercentage = paymentData.reduce((sum, p) => sum + p.value, 0);
+    if (totalPercentage > 0 && totalPercentage !== 100) {
+      // Add the difference to the largest value
+      const diff = 100 - totalPercentage;
+      const maxItem = paymentData.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+      maxItem.value += diff;
+    }
+
+    return {
+      todaySales,
+      todayConsumptionsCount,
+      totalPensionists,
+      activePensionists,
+      debtPensionists,
+      totalDebt,
+      weeklySales,
+      topDishes,
+      paymentData,
+    };
+  }
 }

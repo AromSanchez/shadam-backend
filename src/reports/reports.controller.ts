@@ -135,4 +135,9 @@ export class ReportsController {
 
     res.end(buffer);
   }
+
+  @Get('dashboard-stats')
+  getDashboardStats() {
+    return this.reportsService.getDashboardStats();
+  }
 }

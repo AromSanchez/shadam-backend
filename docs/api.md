@@ -1015,3 +1015,43 @@ Actualiza uno o varios precios. Solo admin.
 > Todos los campos son opcionales. Solo se actualizan los enviados.
 
 **Response 200:** Retorna todos los precios actualizados (mismo formato que GET).
+
+---
+
+# 📊 Reportes y Dashboard
+
+## GET `/reports/dashboard-stats`
+
+Obtiene las estadísticas detalladas necesarias para el Dashboard de administración. Solo accesible para `admin`.
+
+### Response 200
+
+```json
+{
+  "todaySales": 120.50,
+  "todayConsumptionsCount": 12,
+  "totalPensionists": 25,
+  "activePensionists": 20,
+  "debtPensionists": 3,
+  "totalDebt": 45.50,
+  "weeklySales": [
+    { "day": "Lun", "ventas": 1200 },
+    { "day": "Mar", "ventas": 980 },
+    { "day": "Mié", "ventas": 1450 },
+    { "day": "Jue", "ventas": 1100 },
+    { "day": "Vie", "ventas": 1680 },
+    { "day": "Sáb", "ventas": 2100 },
+    { "day": "Dom", "ventas": 1900 }
+  ],
+  "topDishes": [
+    { "name": "Lomo Saltado", "count": 45, "pct": 100 },
+    { "name": "Ceviche Mixto", "count": 38, "pct: 84 }
+  ],
+  "paymentData": [
+    { "name": "Efectivo", "value": 50, "color": "#06b6d4" },
+    { "name": "Yape", "value": 30, "color": "#7c3aed" },
+    { "name": "Saldo", "value": 20, "color": "#facc15" }
+  ]
+}
+```
+
